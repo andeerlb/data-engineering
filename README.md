@@ -2,8 +2,6 @@
 
 > **Goal:** Build deep, production-grade expertise in Data Engineering, Cloud, Streaming, Lakehouse, and Platform Architecture over one year.
 
----
-
 ## Core Infrastructure & Cloud
 
 ### AWS & Cloud Fundamentals
