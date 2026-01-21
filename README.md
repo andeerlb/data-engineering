@@ -5,7 +5,7 @@
 ## Core Infrastructure & Cloud
 
 ### AWS & Cloud Fundamentals
-- [ ] AWS S3
+- [x] AWS S3
 - [ ] AWS EC2
 - [ ] AWS RDS
 - [ ] AWS ELB / ALB
