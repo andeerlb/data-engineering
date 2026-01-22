@@ -145,3 +145,17 @@ Example IAM policy per access point:
 - Simple setup
 - One application, one bucket
 - No complex permission model
+
+#### VPC-only Access Points
+A VPC-only Access Point is an S3 Access Point that can be accessed only from within a specific VPC.   
+When you enable VPC-only access:
+- The access point is associated with a VPC
+- Traffic flows through an S3 VPC Endpoint
+- AWS enforces that requests must come from that VPC
+
+#### Multi-Region Access Points
+A Multi-Region Access Point (MRAP) provides one global endpoint that routes S3 requests to the best bucket in multiple regions.   
+What’s under the hood: 
+- Multiple S3 buckets (one per region)
+- S3 Replication between them
+- AWS Global Network + latency-based routing
