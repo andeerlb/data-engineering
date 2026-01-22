@@ -16,9 +16,9 @@ Amazon Simple Storage Service (Amazon S3) is an object storage service that offe
 ### aws cli to use s3
 Simple commands, just to show that we could use the AWS CLI from S3 directly.   
 
-- `aws s3 ls` (to list all of your buckets)
+- `aws s3 ls` (to list all of your buckets).  
 ![alt text](image.png)
-- `aws s3 ls s3://<BUCKET_NAME>` (to list all objects in your bucket)
+- `aws s3 ls s3://<BUCKET_NAME>` (to list all objects in your bucket).  
 ![alt text](image-1.png)
 - `aws s3 cp report-test1.txt s3://<BUCKET_NAME>` (to copy objects from bucket)
 
