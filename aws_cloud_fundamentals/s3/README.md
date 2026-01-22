@@ -108,3 +108,40 @@ Versioning is a means of keeping multiple variants of an object in the same buck
     "Resource": "arn:aws:s3:::<BUCKET_NAME>/*"
 }
 ```
+
+### Access point
+An S3 Access Point is a named network endpoint that provides controlled access to a specific S3 bucket, with its own permissions and network rules.
+Instead of managing all access rules directly on the bucket policy (which can get messy fast), you create multiple access points, each one tailored to a specific application, team, or use case.  
+
+> Think of it like   
+> **One bucket, multiple “doors”, each door with its own lock and rules.**
+
+
+with access point one bucket can have:
+- Multiple access points
+- Each access point has:
+- Its own IAM policy
+
+Example IAM policy per access point:   
+```
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": ["s3:GetObject"],
+      "Resource": "arn:aws:s3:region:account-id:accesspoint/<bucket>/object/*"
+    }
+  ]
+}
+```
+
+#### When should you use Access Points?
+- Multiple applications share the same bucket
+- You want clean separation of permissions
+- Bucket policies are becoming hard to maintain
+
+#### When you don’t need them
+- Simple setup
+- One application, one bucket
+- No complex permission model
