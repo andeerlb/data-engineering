@@ -54,3 +54,24 @@ Different instance families grow based on the resource for which the family is o
 | Memory optimized    | r5g.xlarge    | 4    | 32           |
 | Memory optimized    | r6g.2xlarge   | 6    | 64           |
 | Memory optimized    | r6g.4xlarge   | 16   | 128          |
+
+
+### AWS Compute Optimizer
+AWS Compute Optimizer is a right-sizing recommendation tool that you can use to improve your AWS infrastructure efficiency. Compute Optimizer analyzes the configuration and utilization metrics of your current resources and then generates recommendations for more optimal configurations by considering both cost and performance. 
+
+### Pricing Calculator
+AWS Pricing Calculator is a web-based planning tool that you can use to create estimates for your AWS use cases. You can use it to model your solutions before building them, explore the AWS service price points, and review the calculations behind your estimates. You can use it to help you plan how you spend, find cost saving opportunities, and make informed decisions when using AWS.   
+https://calculator.aws/#/
+
+### Cost Explorer
+You can use AWS Cost Explorer to view and analyze your costs and usage. You can view data for up to the last 12 months, forecast how much you're likely to spend for the next 12 months, and get recommendations for what Reserved Instances to purchase. You can use Cost Explorer to identify areas that need further investigation and view trends that you can use to understand your costs.
+
+### Usage reports and limits
+Cost Explorer provides you with a cost and usage reports. You can't modify these reports, but you can use them to create your own custom reports. 
+
+- Daily costs – This shows how much you've spent in the last 6 months, along with how much you're forecasted to spend over the next month.
+- Monthly costs by linked account – This shows your costs for the last 6 months, grouped by linked, or member account. The top five member accounts are shown by themselves, and the rest are grouped into one bar.
+- Monthly costs by service – This shows your costs for the last 6 months, grouped by service. The top five services are shown by themselves, and the rest are grouped into one bar.
+- Monthly EC2 running hours costs and usage –  This shows how much you have spent on active Reserved Instances.   
+
+For additional information see https://docs.aws.amazon.com/cost-management/latest/userguide/ce-default-reports.html#ce-cost-usage-reports
