@@ -75,3 +75,31 @@ Cost Explorer provides you with a cost and usage reports. You can't modify these
 - Monthly EC2 running hours costs and usage –  This shows how much you have spent on active Reserved Instances.   
 
 For additional information see https://docs.aws.amazon.com/cost-management/latest/userguide/ce-default-reports.html#ce-cost-usage-reports
+
+### AMIs
+An Amazon Machine Image (AMI) is a template that contains the software configuration—for example, an operating system (OS), applications, or tools. You use the AMI and the information contained within it to launch an instance. You must specify an AMI when you launch an instance because it contains all the necessary information and files required to build and launch the instance. If you don't specify an AMI, you cannot launch an instance.   
+   
+Because the AMI is a configuration template, you can use a single AMI to launch multiple instances. Or you can choose to launch a variety of different instances using different AMIs that contain unique configuration options.  
+   
+Amazon EC2 supports AMIs that use the Linux, Windows, or macOS operating systems. An AMI includes the following pieces
+
+- Storage
+- Permissions
+- Mapping
+
+### AWS Nitro System
+The majority of EC2 instances run on hardware known as the AWS Nitro System. The AWS Nitro System is built specifically to run instances in the most optimal fashion possible. The AWS Nitro System is a combination of dedicated hardware and a lightweight hypervisor, for faster innovation and enhanced security.
+To learn more about it,  yo ucan read all about it on the https://aws.amazon.com/ec2/nitro/#:~:text=AWS%20has%20completely%20re%2Dimagined,rich%20set%20of%20management%20capabilities.
+
+### Network interface
+The final piece of an instance is the networking components. Each instance comes with an elastic network interface. This is a logical networking component that represents a virtual network card. You can think of it like the network interface (NIC) in your laptop, desktop, or server. The elastic network interface is the element in your instance that allows it to communicate with other instances, servers, features, and anything on the internet.
+
+### Tenancy
+A tenant is the most fundamental concept in the cloud. A tenant is an entity that occupies space, whether that space is a rented apartment in a building you own, or if that rented space is an instance occupying resources on AWS infrastructure. With Amazon EC2, tenancy defines how the EC2 instances are distributed across the physical hardware. Tenancy choices also have an effect on pricing. 
+
+- shared.  
+    - Shared tenancy is the default tenancy for Amazon EC2 instances. Shared tenancy means that when you launch your instance, the instance is created on an AWS server that you share with many other different AWS customer accounts. Your instance is isolated and secured from the other user's instances but you are all sharing the same underlying hardware. 
+- dedicated instance.  
+    - Is a physical server where all the instance capacity is fully dedicated to your use. With Dedicated Hosts you can use your existing per-socket, per-core, or per-virtual machine (VM) software licenses, including Windows Server, Microsoft SQL Server, SUSE, and Linux Enterprise Server.
+- dedicated host.  
+    - Are Amazon EC2 instances that run on hardware that's dedicated to a single customer. Dedicated Instances can share hardware with other instances from the same AWS account that are not Dedicated Instances
