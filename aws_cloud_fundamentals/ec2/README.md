@@ -103,3 +103,17 @@ A tenant is the most fundamental concept in the cloud. A tenant is an entity tha
     - Is a physical server where all the instance capacity is fully dedicated to your use. With Dedicated Hosts you can use your existing per-socket, per-core, or per-virtual machine (VM) software licenses, including Windows Server, Microsoft SQL Server, SUSE, and Linux Enterprise Server.
 - dedicated host.  
     - Are Amazon EC2 instances that run on hardware that's dedicated to a single customer. Dedicated Instances can share hardware with other instances from the same AWS account that are not Dedicated Instances
+
+### Launching through the console
+
+#### Launch wizard
+The launch instance wizard provides default values for all of the parameters. You can accept any or all of the defaults, or configure an instance by specifying your own values for each parameter. The parameters are grouped in the launch instance wizard. The wizard walks you through deploying an EC2 instance.
+
+#### Launch template
+A launch template contains the configuration information to launch an instance and allows you to use the same template to launch multiple instances with the same settings.
+
+#### Existing instance
+The Amazon EC2 console provides a launch wizard option that allows you to use a current instance as a base for launching other instances. This option automatically populates the Amazon EC2 launch wizard with certain configuration details from the selected instance.
+
+#### Aws marketplace
+The AWS Marketplace is a curated digital catalog that you can use to find, buy, deploy, and manage third-party software, data, and services. AMIs are available for purchase that come with preinstalled software configurations for a wide range of technologies.
