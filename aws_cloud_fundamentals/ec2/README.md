@@ -117,3 +117,19 @@ The Amazon EC2 console provides a launch wizard option that allows you to use a 
 
 #### Aws marketplace
 The AWS Marketplace is a curated digital catalog that you can use to find, buy, deploy, and manage third-party software, data, and services. AMIs are available for purchase that come with preinstalled software configurations for a wide range of technologies.
+
+### Lifecycle of an instance
+An EC2 instance transitions through a variety of states from the moment you launch it through to its termination.
+
+- Hibernate
+    - When you hibernate an instance, Amazon EC2 signals the operating system to perform hibernation (suspend-to-disk). Hibernation saves the contents from the instance memory (RAM) to your Amazon EBS root volume. Amazon EC2 persists the instance EBS root volume and any attached EBS data volumes. When you start your instance, the following events occur:
+        - The EBS root volume is restored to its previous state.
+        - The RAM contents are reloaded.
+        - The processes that were previously running on the instance are resumed.
+        - Previously attached data volumes are reattached and the instance retains its instance ID.
+- Reboot (scheduled event)
+    - AWS can schedule events, such as a reboot, for your instances. An instance reboot is equivalent to an operating system reboot. In most cases, it takes only a few minutes to reboot your instance. When you reboot an instance, it keeps its public DNS name (IPv4), private and public IPv4 address, IPv6 address (if applicable), and any data on its instance store volumes.
+- Retire
+    - An instance is scheduled to be retired when AWS detects irreparable failure of the underlying hardware that hosts the instance. When an instance reaches its scheduled retirement date, it is stopped or terminated by AWS.
+        - If your instance root device is an EBS volume, the instance is stopped, and you can start it again at any time. Starting the stopped instance migrates it to new hardware.
+        - If your instance root device is an instance store volume, the instance is terminated and cannot be used again.
