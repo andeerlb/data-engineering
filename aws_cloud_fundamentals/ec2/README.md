@@ -133,3 +133,23 @@ An EC2 instance transitions through a variety of states from the moment you laun
     - An instance is scheduled to be retired when AWS detects irreparable failure of the underlying hardware that hosts the instance. When an instance reaches its scheduled retirement date, it is stopped or terminated by AWS.
         - If your instance root device is an EBS volume, the instance is stopped, and you can start it again at any time. Starting the stopped instance migrates it to new hardware.
         - If your instance root device is an instance store volume, the instance is terminated and cannot be used again.
+
+### Connecting to the instances
+There are a variety of instance connection options from within the AWS Management Console and from a client-side machine.   
+For client-side connections, the tool you use to connect to the instance depends both on what the instance OS is and which operating system you are running on your local client machine. AWS provides guidance and documentation for deploying, connecting, and operating both Linux-based and Windows-based instances.
+
+#### Using ssh
+Secure Shell (SSH) is a network protocol that faciliatates a secure, encrypted connection between two systems—an SSH client and an SSH server. When connected to the server, the client can remotely perform all operations as if they were standing in front of the server.   
+SSH authentication to an EC2 instance is done through the use of the key pair you associated with the instance when you launched it. The key pairs, a public and a private key, are a form of asymmetric cryptography used to authenticate the client and server to each other. This key pair makes it possible to secure, connect, and manage the instance, which is why it is very important to not lose your key pair.   
+
+SSH tools
+    - Linux and MacOS
+        - SSH is a native tool built into Unix-based systems
+    - Windows
+        - For newer versions of the Windows OS, a version of OpenSSH comes preinstalled. Additionally, there are a variety of SSH tools that can be downloaded and installed; for example, PuTTY, WinSCP, and xShell
+
+### Controlling access to your instance
+The security group controls the traffic into the instance itself. When you launch an instance, you assign it one or more security groups. You can add multiple rules within each security group to control traffic allowed into or out of the instance. By default, all traffic is allowed out of the instance and you must create inbound rules if you want any traffic allowed inbound. 
+
+### Accessing an instance using Session Manager
+With AWS Systems Manager Session Manager, you can manage your Amazon EC2 instances through a browser-based shell or through the AWS CLI. You can use Session Manager to directly start a session with an instance while you're working in the EC2 Dashboard or AWS account. After the session is started, you can run bash commands as you would through any other connection type. Session Manager removes the need to open inbound ports, manage SSH keys, or use bastion hosts. You can use Session Manager with AWS PrivateLink to prevent traffic from going through the public internet. 
