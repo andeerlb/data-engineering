@@ -178,3 +178,44 @@ Cloud file storage is a method for storing data in the cloud that provides serve
 There are many file storage solutions that exist, ranging from a single node file server on a compute instance using block storage as the underpinnings with no scalability or few redundancies to protect the data, to a do-it-yourself clustered solution, to a fully managed solution.
 
 ### Network options
+An elastic network interface is a logical networking component that represents a virtual network card. As with all network cards, the elastic network interface provides the ability for the host instance to communicate on the network to other hosts, resources, and the external internet. When you create a security group, the security group is associated with the elastic network interface. Traffic that attempts to connect to the elastic network interface must have a security group rule that allows inbound access to the instance.   
+There are two classifications of elastic network interfaces: Primary and secondary.
+
+- Primary elastic network interface is created by default when the instance is created. You cannot detach or move a primary elastic network interface from the instance on which it was created. 
+
+- Secondary elastic network interface is an additional interface that you create and attach to the instance. The maximum number of elastic network interfaces that you can use varies by instance type.
+
+You can attach an additional interface to an instance, detach it from the instance and then attach it to another instance. The attributes of an elastic network interface follow it from one instance to another. When you move an elastic network interface from one instance to another instance, the network traffic is automatically redirected to the new instance.
+
+### Use cases for elastic network interfaces
+- Failover: You can manually detach the elastic network interface from a failed or down instance and then attach the interface to a new instance. When you do this, the interface keeps its original IP address and traffic automatically routes to the new instance.
+
+- Management: When using multiple elastic network interfaces configured on one instance, you can dedicate one interface for administrative traffic and the other for the workload or business traffic. When isolating the management traffic, the second interface can focus on only managing the workload. Security groups use each interface to isolate the traffic based on port, protocol, or IP address.
+
+### Public IP address
+When your instance starts, it is auto-assigned a public IP address for users on the internet to connect. When the instance is stopped, the auto-assigned IP address is released back to the public IP address pool. When the instance is restarted, a new unique IP address is reassigned.   
+Public IP address assignment in the default VPC and in a nondefault VPC work differently. When you launch an instance in a default VPC, a public IP address is assigned automatically. When you launch an instance into a nondefault VPC, it checks an attribute in the subnet that determines whether instances launched into that subnet can receive a public IP address from the public IPv4 address pool. By default, instances launched in a nondefault subnet are not assigned a public IP address.
+
+### Public IP address pool assignments
+All of the public IP addresses are assigned from a pool of public IPv4 addresses at Amazon. This public address is not associated with your AWS account. When a public IP address is disassociated from your instance, it is released back into the public IPv4 address pool, and you cannot reuse it. You cannot manually associate or disassociate a public IP (IPv4) address from your instance. Instead, in certain cases, the public IP address from your instance is released or a new IP address is assigned.
+
+### Elastic IP addresss
+An Elastic IP address is a static public IPv4 address associated with your AWS account in a specific Region. Unlike an auto-assigned public IP address, an Elastic IP address is preserved after you stop and start your instance in a VPC.   
+You can choose to associate an Elastic IP address with your EC2 instance at any time using one of the following tools:
+
+- Amazon EC2 console
+- AWS Command Line Interface (AWS CLI)
+- AWS Tools for Windows PowerShell
+
+Keep the following points in mind when working with static IP addresses:
+
+- You can't retain or reserve the current public IP address assigned to the instance using auto-assigned public IP address.
+- You cannot convert an auto-assigned public IP address to an Elastic IP address.
+- There is a default limit of five Elastic IP addresses per Region per AWS account. 
+- You are charged a small fee for any Elastic IP address that is not associated to a running instance. 
+- An Elastic IP address remains associated with your AWS account until you release it, and you can move it from one instance to another as needed. 
+- You can bring your own IP address range to your AWS account, where it appears as an address pool, and then allocate Elastic IP addresses from your address pool.
+
+### IPv6 addresss
+You can optionally associate an IPv6 CIDR block with your VPC and associate IPv6 CIDR blocks with your subnets. The IPv6 CIDR block for your VPC is automatically assigned from the pool of IPv6 addresses at Amazon; you cannot choose the range yourself.   
+At this time, you cannot remove the default IPv4 address and user only native IPv6.
