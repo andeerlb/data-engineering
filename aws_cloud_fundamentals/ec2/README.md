@@ -219,3 +219,5 @@ Keep the following points in mind when working with static IP addresses:
 ### IPv6 addresss
 You can optionally associate an IPv6 CIDR block with your VPC and associate IPv6 CIDR blocks with your subnets. The IPv6 CIDR block for your VPC is automatically assigned from the pool of IPv6 addresses at Amazon; you cannot choose the range yourself.   
 At this time, you cannot remove the default IPv4 address and user only native IPv6.
+
+### AWS Well-Architected
