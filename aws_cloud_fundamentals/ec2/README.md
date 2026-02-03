@@ -153,3 +153,24 @@ The security group controls the traffic into the instance itself. When you launc
 
 ### Accessing an instance using Session Manager
 With AWS Systems Manager Session Manager, you can manage your Amazon EC2 instances through a browser-based shell or through the AWS CLI. You can use Session Manager to directly start a session with an instance while you're working in the EC2 Dashboard or AWS account. After the session is started, you can run bash commands as you would through any other connection type. Session Manager removes the need to open inbound ports, manage SSH keys, or use bastion hosts. You can use Session Manager with AWS PrivateLink to prevent traffic from going through the public internet. 
+
+### Block device mapping
+Your instance might include local storage volumes, known as instance store volumes, which you can configure at launch time with block device mapping. After these volumes have been added to and mapped on your instance, they are available for you to mount and use. If your instance fails, or if your instance is stopped or terminated, the data on these volumes is lost; therefore, these volumes are best used for temporary data. To keep important data safe, you should use a replication strategy across multiple instances or store your persistent data in Amazon S3 or Amazon EBS volumes.   
+
+### Instance store
+You can specify instance store volumes for an instance only when you launch it. You can't detach an instance store volume from one instance and attach it to a different instance.
+
+The data in an instance store persists only during the lifetime of its associated instance. If an instance reboots (intentionally or unintentionally), data in the instance store persists. However, data in the instance store is lost under any of the following circumstances:   
+
+- The underlying disk drive fails
+- The instance stops
+- The instance hibernates
+- The instance terminates
+
+### Amazon EBS volumes
+Amazon EBS provides block level storage volumes for use with EC2 instances. After you attach a volume to an instance, you can use it as you would use a physical hard drive. EBS volumes are flexible. For current-generation volumes attached to current-generation instance types, you can dynamically increase size, modify the provisioned IOPS capacity, and change volume type on live production volumes.
+
+### Boot times differences
+Instances launched from an Amazon EBS-backed AMI launch faster than instances launched from an instance store-backed AMI. When you launch an instance from an instance store-backed AMI, all the parts have to be retrieved from Amazon S3 before the instance is available. With an Amazon EBS-backed AMI, only the parts required to boot the instance need to be retrieved from the snapshot before the instance is available. However, the performance of an instance that uses an EBS volume for its root device is slower for a short time while the remaining parts are retrieved from the snapshot and loaded into the volume. When you stop and restart the instance, it launches quickly, because the state is stored in an EBS volume. 
+
+### File storage options
