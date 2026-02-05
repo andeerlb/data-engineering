@@ -221,3 +221,21 @@ You can optionally associate an IPv6 CIDR block with your VPC and associate IPv6
 At this time, you cannot remove the default IPv4 address and user only native IPv6.
 
 ### AWS Well-Architected
+LINKS: 
+* [PAPER](https://docs.aws.amazon.com/pdfs/wellarchitected/latest/operational-excellence-pillar/wellarchitected-operational-excellence-pillar.pdf)  
+* [AWS Well-Architected page](https://aws.amazon.com/architecture/well-architected/?wa-lens-whitepapers.sort-by=item.additionalFields.sortDate&wa-lens-whitepapers.sort-order=desc)  
+
+Helps you build secure, high-performing, resilient, and efficient infrastructure for a variety of applications and workloads. This framework is built around six pillars—operational
+
+1. Excellence
+2. Security
+3. Reliability
+4. Performance efficiency
+5. Cost optimization
+6. Sustainability
+
+It provides a consistent approach to evaluate architectures and implement scalable designs. The AWS Well-Architected site provides lens-specific whitepapers, labs, guidance, and pillar-specific documentation so you can focus on specific pillars of the framework. 
+
+#### What is resilience?
+Resilience is the ability of a workload to recover from infrastructure or service disruptions. The recovery has two dimensions: how long it takes to get the system back online for your users and how long it takes to restore the data you had.   
+Amazon EC2 is resilient by design, because the AWS global infrastructure is built around the concept of AWS Regions and Availability Zones. Regions provide multiple physically separated and isolated Availability Zones, which are connected through low-latency, high-throughput, and highly redundant networking. 
