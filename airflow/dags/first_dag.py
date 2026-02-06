@@ -55,11 +55,12 @@ def verify_task_is_valid(ti):
 with DAG(dag_id="my_first_dag", start_date=datetime(2023, 1, 1),
     schedule="30 * * * *", catchup=False) as dag:
 
-    capture_and_count_data = PythonOperator(
+    capture_and_count_data_task = PythonOperator(
         # task_id is a unique identifier for the task within the DAG. It is used to reference the task in other parts of the DAG, such as when defining dependencies between tasks. In this case, we set the task_id to "capture_and_count_data".
         task_id="capture_and_count_data",
-        # python_callable is the Python function that will be executed when the task runs. In this case, we use a lambda function that simply prints "Capturing and counting data...". In a real-world scenario, you would replace this with a function that performs the actual data capture and counting logic.
-        python_callable=lambda: print("Capturing and counting data...")
+        # python_callable is a parameter that specifies the Python function that will be executed when the task runs. 
+        # In this case, we set python_callable to capture_and_count_data, which means that the capture_and_count_data function will be executed when the "capture_and_count_data" task runs.
+        python_callable=capture_and_count_data
     )
 
     # branchpythonoperator allows us to define a task that can branch to different tasks based on a condition. In this case, we define a task called "is_valid" that will execute the capture_and_count_data function and check if the result is greater than 100. If the result is greater than 100, it will branch to the "valid" task; otherwise, it will branch to the "non_valid" task.
