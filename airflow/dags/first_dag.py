@@ -78,3 +78,11 @@ with DAG(dag_id="my_first_dag", start_date=datetime(2023, 1, 1),
         bash_command="echo 'Quantity is not valid (not ok)'"
     )
 
+    # In Airflow, we define dependencies between tasks using the bitshift operators (>> and <<). 
+    # The >> operator is used to indicate that one task should run after another task.
+    # The << operator is used to indicate that one task should run before another task.
+    # In this code, we define the dependencies between the tasks as follows:
+    # The "capture_and_count_data" task should run before the "is_valid" task, and the "is_valid" task should run before both the "valid" and "non_valid" tasks. 
+    # This means that the "capture_and_count_data" task will execute first, and once
+    capture_and_count_data >> is_valid >> [valid, non_valid]
+
