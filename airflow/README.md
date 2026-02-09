@@ -10,5 +10,5 @@ Save your dags here to edit and be importated by airflow
 vim dags/**
 ```
 
-To get the admin password
+To get the admin password.  
 `docker compose logs airflow-webserver | grep Password`
