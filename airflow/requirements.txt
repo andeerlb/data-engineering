@@ -3,3 +3,4 @@ apache-airflow-providers-postgres==6.5.3
 pyyaml==6.0.3
 pydantic==2.12
 pandas==3.0.0
+graphviz==0.20.1
