@@ -3,7 +3,6 @@
 # and monitor workflows (pipelines).
 
 import pendulum
-import pandas as pd
 import requests
 
 # In Airflow 3.x, the recommended way to define DAGs and tasks
@@ -58,19 +57,18 @@ def my_first_dag():
         # We fetch data from a public API.
         # requests is a popular Python library for making HTTP requests.
         url = "https://jsonplaceholder.typicode.com/posts"
+        # this line makes a GET request to the specified URL with a timeout of 30 seconds
+        # the return is a list of posts in JSON format
+        # [{ "userId": 1, "id": 1, "title": "", "body": "" }...]
         response = requests.get(url, timeout=30)
 
         # raise_for_status() will raise an exception if the HTTP
         # response code is not 2xx, causing the task to fail.
         response.raise_for_status()
 
-        # DataFrame is a 2-dimensional labeled data structure in pandas.
-        # Here, we convert the JSON response into a pandas DataFrame.
-        df = pd.DataFrame(response.json())
-
-        # Calculate the number of rows in the DataFrame.
-        # len(df.index) returns the total number of rows.
-        qtd = len(df.index)
+        # Count items directly from the JSON array in the response.
+        data = response.json()
+        qtd = len(data)
 
         print(f"Quantidade de registros: {qtd}")
 
