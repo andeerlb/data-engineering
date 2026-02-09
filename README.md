@@ -6,7 +6,7 @@
 
 ### AWS & Cloud Fundamentals
 - [x] AWS S3
-- [ ] AWS EC2
+- [x] AWS EC2
 - [ ] AWS RDS
 - [ ] AWS ELB / ALB
 - [ ] AWS Route 53
