@@ -1,0 +1,2 @@
+pipelines:
+  - dag_id: first_dag
