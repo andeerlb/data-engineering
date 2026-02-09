@@ -3,6 +3,7 @@
 # and monitor workflows (pipelines).
 
 import pendulum
+import pandas as pd
 import requests
 
 # In Airflow 3.x, the recommended way to define DAGs and tasks
@@ -66,11 +67,15 @@ def my_first_dag():
         # response code is not 2xx, causing the task to fail.
         response.raise_for_status()
 
-        # Count items directly from the JSON array in the response.
-        data = response.json()
-        qtd = len(data)
+        # DataFrame is a 2-dimensional labeled data structure in pandas.
+        # Here, we convert the JSON response into a pandas DataFrame.
+        df = pd.DataFrame(response.json())
 
-        print(f"Quantidade de registros: {qtd}")
+        # Calculate the number of rows in the DataFrame.
+        # len(df.index) returns the total number of rows.
+        qtd = len(df.index)
+
+        print(f"Quantity of records: {qtd}")
 
         # Returning a value in a TaskFlow task automatically
         # stores it in XCom.
@@ -84,7 +89,7 @@ def my_first_dag():
     # The function must return:
     #   - the task_id of the next task to follow
     def branch_logic(qtd: int) -> str:
-        if qtd > 100:
+        if qtd > 99:
             return "valid"
         else:
             return "non_valid"
