@@ -19,6 +19,11 @@ x-airflow-common: &airflow-common
     # Webserver (api-server)
     AIRFLOW__WEBSERVER__EXPOSE_CONFIG: "true"
 
+    # Airflow 3.x API server base URL for scheduler/worker
+    AIRFLOW__API__BASE_URL: http://airflow-webserver:8080
+    AIRFLOW__API__JWT_SECRET: ${AIRFLOW__API__JWT_SECRET}
+    AIRFLOW__API_AUTH__JWT_SECRET: ${AIRFLOW__API_AUTH__JWT_SECRET}
+
     # additional
     _PIP_ADDITIONAL_REQUIREMENTS: ""
 
