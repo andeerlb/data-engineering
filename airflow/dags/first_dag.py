@@ -12,7 +12,7 @@ from airflow.decorators import dag, task
 
 # BranchPythonOperator is still used when you need to decide
 # which path the DAG should follow based on a condition.
-from airflow.operators.branch import BranchPythonOperator
+from airflow.operators.python import BranchPythonOperator
 
 # BashOperator allows us to execute bash commands as tasks in our DAG.
 from airflow.operators.bash import BashOperator
