@@ -7,6 +7,7 @@ This project provisions an **Amazon Redshift cluster** using Terraform, includin
 * A Security Group allowing inbound traffic on port `5439`
 * A Redshift Subnet Group
 * A Redshift Cluster (single-node by default)
+* An S3 bucket for COPY/UNLOAD staging data
 * No public access by default
 
 ---
@@ -22,6 +23,7 @@ Before running this project, ensure you have:
   * EC2
   * VPC
   * Redshift
+  * S3
   * IAM (if extending later)
 
 Check Terraform version:
@@ -87,6 +89,12 @@ After deployment, Terraform will output:
 * Redshift endpoint
 * Port
 * JDBC connection URL
+
+---
+
+# S3 Bucket
+
+This project creates a dedicated S3 bucket to stage data for Redshift `COPY` and `UNLOAD` operations. The bucket name includes a random suffix to avoid collisions.
 
 ---
 
