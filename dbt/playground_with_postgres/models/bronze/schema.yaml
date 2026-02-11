@@ -1,0 +1,10 @@
+sources:
+  - name: jaffle_shop
+    schema: jaffle_shop
+    tables:
+      - name: customers
+      - name: orders
+  - name: stripe
+    schema: stripe
+    tables:
+      - name: payments
