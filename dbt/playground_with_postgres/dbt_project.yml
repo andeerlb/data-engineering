@@ -34,3 +34,13 @@ models:
     # Config indicated by + and applies to all files under models/example/
     example:
       +materialized: view
+
+seeds:
+  playground_with_postgres:
+    stripe:
+      +schema: stripe
+      +quote_columns: false
+
+    jaffle_shop:
+      +schema: jaffle_shop
+      +quote_columns: false
