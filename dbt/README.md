@@ -109,7 +109,7 @@ select * from stripe.payment;
 
 ### to copy the data from S3 into redshift
 
-```
+```sql
 copy jaffle_shop.customers(id, first_name, last_name)
 from 's3://<S3_BUCKET_NAME>/jaffle_shop_customers.csv'
 iam_role 'arn:aws:iam::XXXXXXXXXX:role/RoleName'
