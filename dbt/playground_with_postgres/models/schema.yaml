@@ -1,0 +1,59 @@
+version: 2
+
+sources:
+  - name: jaffle_shop
+    description: This is the source data for the jaffle shop, which is a fictional online store that sells coffee and donuts.
+    schema: jaffle_shop
+    tables:
+      - name: customers
+        description: This table contains information about customers, including their name and email address.
+      - name: orders
+        description: This table contains information about orders, including the customer who placed the order, the date of the order, and the status of the order.
+  - name: stripe
+    description: This is the source data for Stripe, which is a payment processing platform.
+    schema: stripe
+    tables:
+      - name: payments
+
+models:
+  - name: customers
+    description: One record per customer, raw data from the source system (csv file or database table)
+    columns:
+      - name: id
+        description: Primary key
+        data_tests:
+          - unique
+          - not_null
+      - name: first_order_date
+        description: NULL when a customer has not yet placed an order.
+
+  - name: silver_customers
+    description: This model cleans up customer data
+    columns:
+      - name: customer_id
+        description: Primary key
+        data_tests:
+          - unique
+          - not_null
+
+  - name: silver_orders
+    description: This model cleans up order data
+    columns:
+      - name: order_id
+        description: Primary key
+        data_tests:
+          - unique
+          - not_null
+      - name: status
+        description: The current status of the order
+        data_tests:
+          - accepted_values:
+              arguments: # available in v1.10.5 and higher. Older versions can set the <argument_name> as the top-level property.
+                values: ['placed', 'shipped', 'completed', 'return_pending', 'returned']
+      - name: customer_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('silver_customers')
+                field: customer_id
