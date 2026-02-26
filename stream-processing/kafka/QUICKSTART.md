@@ -29,7 +29,7 @@ You should see all services running:
 
 Go to http://localhost:8080 in your browser.
 
-## ⚡ Quick Commands
+## Quick Commands
 
 Using the Makefile (recommended):
 
