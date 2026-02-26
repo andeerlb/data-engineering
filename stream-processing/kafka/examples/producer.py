@@ -37,16 +37,16 @@ def create_producer():
             # Buffer memory
             buffer_memory=33554432,
         )
-        print(f"✅ Successfully connected to Kafka at {KAFKA_BOOTSTRAP_SERVERS}")
+        print(f"Successfully connected to Kafka at {KAFKA_BOOTSTRAP_SERVERS}")
         return producer
     except KafkaError as e:
-        print(f"❌ Failed to connect to Kafka: {e}")
+        print(f"Failed to connect to Kafka: {e}")
         raise
 
 
 def produce_messages(producer, num_messages=10):
     """Produce sample messages to Kafka topic"""
-    print(f"\n📤 Starting to produce {num_messages} messages to topic '{TOPIC_NAME}'...\n")
+    print(f"\nStarting to produce {num_messages} messages to topic '{TOPIC_NAME}'...\n")
     
     for i in range(num_messages):
         # Create sample message
@@ -68,26 +68,26 @@ def produce_messages(producer, num_messages=10):
             # Wait for message to be sent (make it synchronous for demo)
             record_metadata = future.get(timeout=10)
             
-            print(f"✅ Message {i} sent successfully:")
+            print(f"Message {i} sent successfully:")
             print(f"   Topic: {record_metadata.topic}")
             print(f"   Partition: {record_metadata.partition}")
             print(f"   Offset: {record_metadata.offset}")
             print(f"   Data: {message}\n")
             
         except KafkaError as e:
-            print(f"❌ Failed to send message {i}: {e}")
+            print(f"Failed to send message {i}: {e}")
         
         # Sleep for a bit to simulate real-world scenario
         time.sleep(0.5)
     
     # Ensure all messages are sent
     producer.flush()
-    print(f"\n✅ All {num_messages} messages have been produced!\n")
+    print(f"\nAll {num_messages} messages have been produced!\n")
 
 
 def produce_with_key(producer, num_messages=5):
     """Produce messages with keys for partitioning"""
-    print(f"\n📤 Producing {num_messages} messages with keys...\n")
+    print(f"\nProducing {num_messages} messages with keys...\n")
     
     for i in range(num_messages):
         key = f'key_{i % 3}'.encode('utf-8')  # Using 3 different keys
@@ -105,23 +105,23 @@ def produce_with_key(producer, num_messages=5):
             )
             record_metadata = future.get(timeout=10)
             
-            print(f"✅ Message sent with key '{key.decode()}':")
+            print(f"Message sent with key '{key.decode()}':")
             print(f"   Partition: {record_metadata.partition}")
             print(f"   Offset: {record_metadata.offset}\n")
             
         except KafkaError as e:
-            print(f"❌ Failed to send keyed message {i}: {e}")
+            print(f"Failed to send keyed message {i}: {e}")
         
         time.sleep(0.5)
     
     producer.flush()
-    print(f"✅ All keyed messages produced!\n")
+    print(f"All keyed messages produced!\n")
 
 
 def main():
     """Main function"""
     print("=" * 60)
-    print("🚀 Kafka Producer Example")
+    print("Kafka Producer Example")
     print("=" * 60)
     
     # Create producer
@@ -135,13 +135,13 @@ def main():
         produce_with_key(producer, num_messages=5)
         
     except KeyboardInterrupt:
-        print("\n⚠️  Producer interrupted by user")
+        print("\nProducer interrupted by user")
     except Exception as e:
-        print(f"\n❌ Error occurred: {e}")
+        print(f"\nError occurred: {e}")
     finally:
         # Close producer
         producer.close()
-        print("👋 Producer closed successfully")
+        print("Producer closed successfully")
 
 
 if __name__ == "__main__":

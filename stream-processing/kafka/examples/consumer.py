@@ -46,21 +46,21 @@ def create_consumer(auto_offset_reset='earliest'):
             # Maximum number of records per poll
             max_poll_records=10,
         )
-        print(f"✅ Successfully connected to Kafka at {KAFKA_BOOTSTRAP_SERVERS}")
-        print(f"📥 Subscribed to topic: {TOPIC_NAME}")
-        print(f"👥 Consumer group: {CONSUMER_GROUP_ID}")
-        print(f"📍 Starting from: {auto_offset_reset}")
+        print(f"Successfully connected to Kafka at {KAFKA_BOOTSTRAP_SERVERS}")
+        print(f"Subscribed to topic: {TOPIC_NAME}")
+        print(f"Consumer group: {CONSUMER_GROUP_ID}")
+        print(f"Starting from: {auto_offset_reset}")
         print()
         return consumer
     except KafkaError as e:
-        print(f"❌ Failed to connect to Kafka: {e}")
+        print(f"Failed to connect to Kafka: {e}")
         raise
 
 
 def consume_messages(consumer):
     """Consume messages from Kafka topic"""
     print("=" * 60)
-    print("🎧 Listening for messages... (Press Ctrl+C to stop)")
+    print("Listening for messages... (Press Ctrl+C to stop)")
     print("=" * 60)
     print()
     
@@ -70,7 +70,7 @@ def consume_messages(consumer):
         for message in consumer:
             message_count += 1
             
-            print(f"📨 Message #{message_count} received:")
+            print(f"Message #{message_count} received:")
             print(f"   Topic: {message.topic}")
             print(f"   Partition: {message.partition}")
             print(f"   Offset: {message.offset}")
@@ -84,19 +84,19 @@ def consume_messages(consumer):
             print()
             
     except KeyboardInterrupt:
-        print(f"\n⚠️  Consumer interrupted by user")
-        print(f"📊 Total messages consumed: {message_count}")
+        print(f"\nConsumer interrupted by user")
+        print(f"Total messages consumed: {message_count}")
     except Exception as e:
-        print(f"\n❌ Error occurred: {e}")
+        print(f"\nError occurred: {e}")
     finally:
         consumer.close()
-        print("👋 Consumer closed successfully")
+        print("Consumer closed successfully")
 
 
 def consume_with_manual_commit():
     """Consumer example with manual offset commit"""
     print("=" * 60)
-    print("🎧 Consumer with Manual Commit")
+    print("Consumer with Manual Commit")
     print("=" * 60)
     print()
     
@@ -111,37 +111,37 @@ def consume_with_manual_commit():
             enable_auto_commit=False,
         )
         
-        print(f"✅ Consumer created with manual commit mode")
-        print(f"🎧 Listening for messages... (Press Ctrl+C to stop)\n")
+        print(f"Consumer created with manual commit mode")
+        print(f"Listening for messages... (Press Ctrl+C to stop)\n")
         
         message_count = 0
         batch_size = 5
         
         for message in consumer:
             message_count += 1
-            print(f"📨 Message #{message_count}: {message.value.get('message', 'N/A')}")
+            print(f"Message #{message_count}: {message.value.get('message', 'N/A')}")
             
             # Commit every batch_size messages
             if message_count % batch_size == 0:
                 consumer.commit()
-                print(f"✅ Committed offset after {message_count} messages\n")
+                print(f"Committed offset after {message_count} messages\n")
         
     except KeyboardInterrupt:
-        print(f"\n⚠️  Consumer interrupted by user")
-        print(f"📊 Total messages consumed: {message_count}")
+        print(f"\nConsumer interrupted by user")
+        print(f"Total messages consumed: {message_count}")
         # Commit on shutdown
         consumer.commit()
-        print("✅ Final commit completed")
+        print("Final commit completed")
     except Exception as e:
-        print(f"\n❌ Error occurred: {e}")
+        print(f"\nError occurred: {e}")
     finally:
         consumer.close()
-        print("👋 Consumer closed successfully")
+        print("Consumer closed successfully")
 
 
 def show_consumer_info(consumer):
     """Display consumer information"""
-    print("\n📊 Consumer Information:")
+    print("\nConsumer Information:")
     print("-" * 60)
     
     # Get assigned partitions
@@ -160,7 +160,7 @@ def show_consumer_info(consumer):
 def main():
     """Main function"""
     print("=" * 60)
-    print("🚀 Kafka Consumer Example")
+    print("Kafka Consumer Example")
     print("=" * 60)
     print()
     
@@ -181,14 +181,14 @@ def main():
             consume_with_manual_commit()
         elif choice == "3":
             consumer = create_consumer(auto_offset_reset='latest')
-            print("⏭️  Skipping old messages, waiting for new ones...\n")
+            print("⏭Skipping old messages, waiting for new ones...\n")
             show_consumer_info(consumer)
             consume_messages(consumer)
         else:
-            print("❌ Invalid choice. Exiting.")
+            print("Invalid choice. Exiting.")
             
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f"Error: {e}")
 
 
 if __name__ == "__main__":
