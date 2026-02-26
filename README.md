@@ -108,10 +108,10 @@
 ---
 
 ### Stream Processing
-- ❌ Apache Kafka
+- 🕞 Apache Kafka
 - ❌ Kafka Streams
 - ❌ KSQLDB
-- ❌ Apache Flink
+- 🕞 Apache Flink
 - ❌ Apache Pulsar
 
 ---
