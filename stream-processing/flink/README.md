@@ -91,6 +91,36 @@ SHOW TABLES;
 SHOW FUNCTIONS;
 ```
 
+## Examples
+
+This repository includes comprehensive examples in multiple languages:
+
+### Python Examples (`examples/py/`)
+- **word_count.py**: Basic word count with DataStream API
+- **kafka_consumer.py**: Read and process Kafka messages
+- **kafka_to_kafka.py**: Complete ETL pipeline (Kafka → Transform → Kafka)
+
+See [examples/py/README.md](examples/py/README.md) for setup and usage.
+
+### Java Examples (`examples/java/`)
+- **WordCount.java**: Basic transformations and aggregations
+- **KafkaSourceExample.java**: Consume from Kafka topics
+- **WindowAggregation.java**: Time-based window operations
+- **KafkaToKafka.java**: Full pipeline with JSON processing
+
+See [examples/java/README.md](examples/java/README.md) for setup and usage.
+
+### SQL Examples (`examples/sql/`)
+- **basics.sql**: Fundamentals (SELECT, WHERE, GROUP BY, functions)
+- **kafka_integration.sql**: Reading/writing Kafka with various formats
+- **window_aggregations.sql**: Tumble, Hop, Session windows
+- **joins.sql**: Stream joins, temporal joins, lookup joins
+- **advanced.sql**: Pattern matching, Top-N, deduplication, UDFs
+
+See [examples/sql/README.md](examples/sql/README.md) for usage.
+
+**Quick Access**: Check [examples/README.md](examples/README.md) for a complete overview.
+
 ## Useful Commands
 
 ```bash
