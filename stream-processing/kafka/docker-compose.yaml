@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:7.6.0
@@ -20,6 +18,7 @@ services:
     image: confluentinc/cp-kafka:7.6.0
     hostname: kafka
     container_name: kafka
+    restart: on-failure
     depends_on:
       - zookeeper
     ports:
@@ -39,14 +38,24 @@ services:
       KAFKA_JMX_HOSTNAME: localhost
     volumes:
       - kafka-data:/var/lib/kafka/data
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-broker-api-versions --bootstrap-server localhost:9092 > /dev/null 2>&1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
     networks:
       - kafka-network
 
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     container_name: kafka-ui
+    restart: on-failure
     depends_on:
-      - kafka
+      kafka:
+        condition: service_healthy
+      zookeeper:
+        condition: service_started
     ports:
       - "8080:8080"
     environment:
@@ -61,8 +70,10 @@ services:
     image: confluentinc/cp-schema-registry:7.6.0
     hostname: schema-registry
     container_name: schema-registry
+    restart: on-failure
     depends_on:
-      - kafka
+      kafka:
+        condition: service_healthy
     ports:
       - "8081:8081"
     environment:
@@ -76,9 +87,12 @@ services:
     image: confluentinc/cp-kafka-connect:7.6.0
     hostname: kafka-connect
     container_name: kafka-connect
+    restart: on-failure
     depends_on:
-      - kafka
-      - schema-registry
+      kafka:
+        condition: service_healthy
+      schema-registry:
+        condition: service_started
     ports:
       - "8083:8083"
     environment:
