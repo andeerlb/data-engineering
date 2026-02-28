@@ -12,7 +12,7 @@
 ### AWS & Cloud Fundamentals
 - ✅ AWS S3
 - ✅ AWS EC2
-- 🕞 AWS RDS
+- ✅ AWS RDS
 - ❌ AWS ELB / ALB
 - ❌ AWS Route 53
 - ❌ AWS Auto Scaling Groups

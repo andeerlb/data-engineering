@@ -26,8 +26,8 @@ def create_consumer(auto_offset_reset='earliest'):
     
     Args:
         auto_offset_reset: Where to start reading messages
-            - 'earliest': Start from the beginning
-            - 'latest': Start from the end (only new messages)
+            - 'earliest': Start from the beginning, including old messages, if no committed offset exists, or if the committed offset is invalid (e.g., due to log retention)
+            - 'latest': Start from the end (only new messages), if no committed offset exists, or if the committed offset is invalid
     """
     try:
         consumer = KafkaConsumer(
@@ -166,9 +166,9 @@ def main():
     
     # Choose consumer mode
     print("Select consumer mode:")
-    print("1. Auto commit (recommended for beginners)")
-    print("2. Manual commit (more control)")
-    print("3. Latest messages only (skip old messages)")
+    print("1. Auto commit (recommended for beginners) - it means that the consumer will automatically commit offsets at regular intervals, which is simpler to use but may lead to duplicate processing in case of failures")
+    print("2. Manual commit (more control) - it means that the consumer will not commit offsets automatically, and you need to call consumer.commit() manually to commit offsets, which gives you more control but requires careful handling to avoid data loss or duplicates")
+    print("3. Latest messages only (skip old messages) - it means that the consumer will start reading from the end of the topic, so it will only receive new messages that are produced after the consumer starts, which is useful if you only care about real-time data and want to ignore historical messages")
     
     try:
         choice = input("\nEnter your choice (1-3) [default: 1]: ").strip() or "1"
