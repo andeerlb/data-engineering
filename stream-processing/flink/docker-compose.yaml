@@ -4,7 +4,7 @@ services:
     hostname: jobmanager
     container_name: flink-jobmanager
     ports:
-      - "8081:8081"
+      - "8082:8081"
     command: jobmanager
     environment:
       - |
@@ -51,4 +51,4 @@ networks:
     driver: bridge
   kafka-network:
     external: true
-    name: kafka-kafka-network  # replace with your actual Kafka network name
+    name: kafka_kafka-network  # replace with your actual Kafka network name

@@ -35,7 +35,7 @@ docker-compose up -d
 
 ## Access Web Interface
 
-- **Flink Dashboard**: http://localhost:8081
+- **Flink Dashboard**: http://localhost:8082
   - Visualize jobs, taskmanagers, metrics, and logs
 
 ## Submit a Job
