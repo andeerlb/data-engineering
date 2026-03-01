@@ -15,18 +15,23 @@ Examples using Flink Table API & SQL for stream processing.
 # Enter SQL Client
 docker exec -it flink-jobmanager /opt/flink/bin/sql-client.sh
 ```
+![alt text](./images/start_sql-client.png)
 
 ### Run SQL Files
 
 ```bash
-# Copy SQL file to container
-docker cp basics.sql flink-jobmanager:/opt/flink/examples/
-
-# Run from SQL Client
-Flink SQL> SOURCE '/opt/flink/examples/basics.sql';
+# Start SQL Client
+docker exec -it flink-jobmanager /opt/flink/bin/sql-client.sh
 ```
 
-Or copy-paste the SQL commands directly into the SQL Client.
+**Then copy and paste commands from the SQL files** (basics.sql, kafka_integration.sql, etc.) section by section into the SQL Client.
+
+**Why not execute the file directly?**
+- Flink SQL Client doesn't support executing files with interactive SELECT queries
+- `EXECUTE STATEMENTS FROM` only works for non-query statements (CREATE, INSERT, DROP)
+- The `-i` flag is only for initialization config, not SQL scripts
+
+**Exit SQL Client**: Type `EXIT;` or `QUIT;` or press `Ctrl + D`
 
 ## Available Examples
 

@@ -21,6 +21,7 @@ CREATE TABLE Orders (
     'rows-per-second' = '5',
     'fields.order_id.kind' = 'sequence',
     'fields.order_id.start' = '1',
+    'fields.order_id.end' = '1000000',
     'fields.customer_id.min' = '1',
     'fields.customer_id.max' = '100',
     'fields.amount.min' = '10',
