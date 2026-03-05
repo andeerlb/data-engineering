@@ -57,15 +57,31 @@ This setup provides a production-ready Apache Kafka environment with the followi
 ### Schema Registry
 - **Port**: 8081
 - **URL**: http://localhost:8081
-- **Description**: A centralized database for data schemas. It prevents chaos in your Kafka topics by enforcing that all messages conform to registered schemas. When a producer or consumer registers with Schema Registry, it ensures data quality and compatibility.
-- **Benefits**:
-  - **Data Validation**: Ensures messages match agreed-upon structure
-  - **Schema Versioning**: Track multiple versions of the same schema
-  - **Backward Compatibility**: Validate that new versions work with old consumers
-  - **Forward Compatibility**: Ensure old consumers won't break with new messages
-  - **Avro Support**: Efficient binary serialization with Avro format
-  - **Type Safety**: Catch data type mismatches before they become problems
-- **Example Use Case**: If you have a "user-events" topic, you register a schema that defines a user must have an id, email, and timestamp. Any producer sending data without these fields will be rejected.
+- **Description**: A centralized repository for managing and validating schemas for Kafka topics. Schema Registry acts as a "database for schemas" that ensures data quality, enables schema evolution, and provides compatibility guarantees. It works seamlessly with Avro, Protobuf, and JSON Schema formats.
+- **How It Works**:
+  1. **Producer** serializes data and automatically registers the schema (first time only)
+  2. **Schema Registry** assigns a unique schema ID and validates compatibility
+  3. **Message** includes just the schema ID (5 bytes overhead) instead of full schema (~1KB)
+  4. **Consumer** reads schema ID, fetches schema from registry (cached), and deserializes
+  5. **Result**: 93% reduction in message size + guaranteed data compatibility
+- **Key Benefits**:
+  - **Data Validation**: Ensures messages match agreed-upon structure before they enter Kafka
+  - **Schema Versioning**: Track multiple versions of the same schema with full history
+  - **Automatic Registration**: Schemas are registered automatically when producing first message
+  - **Compatibility Checking**: Validates that schema changes won't break existing consumers
+    - **BACKWARD**: New code reads old data (default)
+    - **FORWARD**: Old code reads new data
+    - **FULL**: Both backward and forward compatible
+    - **NONE**: No checks (use with caution)
+  - **Efficient Encoding**: Messages include only 5-byte header (magic byte + schema ID)
+  - **Schema Evolution**: Change schemas over time without breaking existing applications
+  - **Type Safety**: Catch data type mismatches at serialization time, not at runtime
+  - **Multi-Language**: Java producer, Python consumer - no problem!
+- **Example Use Case**: You have a "payment-transactions" topic. Schema Registry ensures all transactions have required fields (id, amount, timestamp, user_id). When you add a new "currency" field, Schema Registry validates it's backward compatible (has default value). Old consumers continue working while new consumers use the new field. No downtime, no broken pipelines.
+- **See Also**: 
+  - Detailed guide: [SCHEMA_REGISTRY.md](./SCHEMA_REGISTRY.md)
+  - Avro format: [AVRO.md](./AVRO.md)
+  - Python examples: [examples/producer_avro.py](./examples/producer_avro.py) and [examples/consumer_avro.py](./examples/consumer_avro.py)
 
 ### Kafka Connect
 - **Port**: 8083
@@ -192,7 +208,3 @@ docker exec -it kafka kafka-consumer-groups \
   --to-earliest \
   --execute
 ```
-
-### Using Python Kafka Client
-
-See the [examples/](./examples/) directory for Python producer and consumer scripts.
