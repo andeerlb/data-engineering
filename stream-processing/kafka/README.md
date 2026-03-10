@@ -112,7 +112,7 @@ This setup provides a production-ready Apache Kafka environment with the followi
 ```bash
 docker exec -it kafka kafka-topics \
   --create \
-  --topic my-topic \
+  --topic total-sales \
   --bootstrap-server localhost:9092 \
   --partitions 3 \
   --replication-factor 1
