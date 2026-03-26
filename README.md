@@ -222,8 +222,8 @@
 ---
 
 ## Books & Reading List
-- ❌ Principles of Software Architecture Modernization
-- ❌ Continuous Modernization
+- ✅ Principles of Software Architecture Modernization
+- ✅ Continuous Modernization
 - ❌ The DevOps Handbook
 - ❌ The Phoenix Project
 - ❌ Accelerate
