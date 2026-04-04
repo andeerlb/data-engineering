@@ -82,6 +82,7 @@
 - ❌ PostgreSQL
 - ❌ MySQL
 - ❌ Redis
+- 🕞 Clickhouse
 
 ---
 
