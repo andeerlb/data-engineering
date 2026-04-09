@@ -111,9 +111,9 @@
 ### Stream Processing
 - ✅ Apache Kafka
 - ✅ Kafka Streams
-- 🕞 KSQLDB
+- ✅ KSQLDB
 - ✅ Apache Flink
-- ❌ Apache Pulsar
+- 🕞 Apache Pulsar
 
 ---
 
