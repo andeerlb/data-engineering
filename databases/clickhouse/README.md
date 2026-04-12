@@ -1,4 +1,15 @@
 # ClickHouse Cluster with ZooKeeper (Docker Compose)
+ClickHouse exists to solve problems where you need to analyze huge volumes of data very quickly—especially for analytics, reporting, and real-time dashboards.
+
+A good use case for ClickHouse is when you have billions of rows (or more) and need to run complex analytical queries (like aggregations, filtering, group by, time series analysis) in seconds or less. It’s designed for OLAP (Online Analytical Processing), not for transactional workloads.
+
+Typical scenarios:
+
+Analytics platforms (web, app, or business analytics)
+Real-time dashboards (monitoring, metrics, logs)
+Event data (clickstreams, IoT, telemetry)
+Data warehousing for fast reporting
+ClickHouse is used by companies like Yandex, Cloudflare, and many others to power analytics on massive datasets, because it’s extremely fast for reading and aggregating data at scale. It’s column-oriented, which means it’s optimized for reading lots of data, not for frequent updates or deletes.
 
 ## Architecture Overview
 
