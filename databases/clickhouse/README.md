@@ -1,0 +1,77 @@
+# ClickHouse Cluster with ZooKeeper (Docker Compose)
+
+## Architecture Overview
+
+This setup provides a distributed ClickHouse cluster using Docker Compose, with ZooKeeper as the coordination service. The architecture is as follows:
+
+- **4 ClickHouse nodes** (`clickhouse-01`, `clickhouse-02`, `clickhouse-03`, `clickhouse-04`)
+- **1 ZooKeeper node** (for cluster coordination)
+
+Each ClickHouse node runs in its own container and communicates with ZooKeeper for replication, distributed DDL, and failover management. The cluster is suitable for development, testing, and learning distributed ClickHouse concepts.
+
+## How It Works
+
+- **ZooKeeper**: Handles coordination, metadata, and synchronization between ClickHouse nodes. Required for replicated tables and distributed queries.
+- **ClickHouse nodes**: Each node is a full ClickHouse server, configured to use ZooKeeper for cluster operations. Nodes can be accessed individually for queries and management.
+
+## Ports
+
+- ClickHouse HTTP interface: 8123 (node 1), 8124 (node 2), 8125 (node 3), 8126 (node 4)
+- ClickHouse native TCP: 9000 (node 1), 9001 (node 2), 9002 (node 3), 9003 (node 4)
+- ZooKeeper: 2181
+
+## Usage
+
+### Starting the Cluster
+```sh
+docker compose up -d
+```
+
+### Stopping the Cluster
+```sh
+docker compose down
+```
+
+### Cleaning Orphan Containers
+```sh
+docker compose down --remove-orphans
+```
+
+## Web Interface (ClickHouse UI)
+
+You can access the built-in ClickHouse Web UI at:
+- [http://localhost:8123](http://localhost:8123) (node 1)
+- [http://localhost:8124](http://localhost:8124) (node 2)
+- [http://localhost:8125](http://localhost:8125) (node 3)
+- [http://localhost:8126](http://localhost:8126) (node 4)
+
+This interface allows you to run SQL queries and view results directly in your browser.
+
+## Advanced Interfaces
+
+### Tabix
+- **Tabix** is a powerful open-source web UI for ClickHouse.
+- To use Tabix, run it as a separate Docker container:
+  ```sh
+  docker run -d -p 8080:80 --name tabix --rm spoonest/clickhouse-tabix-web-client
+  ```
+- Access Tabix at [http://localhost:8080](http://localhost:8080)
+- Connect to your ClickHouse node using host `host.docker.internal` (if Tabix is running outside the cluster) and port `8123`.
+
+### DBeaver / DataGrip
+- Both are desktop SQL clients with ClickHouse support.
+- Add a new ClickHouse connection:
+  - **Host**: `localhost`
+  - **Port**: `8123` (HTTP) or `9000` (native TCP)
+  - **User**: `default`
+  - **Password**: (leave blank unless you set one)
+- You can manage databases, run queries, and visualize data.
+
+## Example: Creating a Replicated Table
+
+```sql
+CREATE TABLE default.replica_test ON CLUSTER 'cluster_2S_2R' (
+    id UInt32
+) ENGINE = ReplicatedMergeTree('/clickhouse/tables/{shard}/replica_test', '{replica}')
+ORDER BY id;
+```
