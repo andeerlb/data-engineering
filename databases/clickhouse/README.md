@@ -80,9 +80,22 @@ This interface allows you to run SQL queries and view results directly in your b
 
 ## Example: Creating a Replicated Table
 
+This example demonstrates how to create a replicated table in a ClickHouse cluster using the ReplicatedMergeTree engine. This engine allows tables to be automatically replicated across multiple nodes for high availability and fault tolerance. ZooKeeper is used to coordinate replication and ensure consistency between replicas.
+
+When you run the following command, ClickHouse will create the table on all nodes defined in the cluster, and each replica will use ZooKeeper to synchronize data:
+
 ```sql
 CREATE TABLE default.replica_test ON CLUSTER 'cluster_2S_2R' (
-    id UInt32
+  id UInt32
 ) ENGINE = ReplicatedMergeTree('/clickhouse/tables/{shard}/replica_test', '{replica}')
 ORDER BY id;
 ```
+
+**How it works:**
+- `ON CLUSTER 'cluster_2S_2R'`: Executes the statement on all nodes in the cluster.
+- `ReplicatedMergeTree(...)`: Tells ClickHouse to use the ReplicatedMergeTree engine, which replicates data between nodes.
+- `'/clickhouse/tables/{shard}/replica_test'`: The ZooKeeper path for the table, where `{shard}` is replaced by the shard number for each node.
+- `'{replica}'`: The replica identifier, replaced by the replica name for each node.
+- `ORDER BY id`: Sets the primary key for the table.
+
+This setup ensures that data inserted into the table is automatically replicated and kept consistent across the cluster, providing resilience against node failures and enabling distributed queries.
