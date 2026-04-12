@@ -100,3 +100,8 @@ ORDER BY id;
 
 This setup ensures that data inserted into the table is automatically replicated and kept consistent across the cluster, providing resilience against node failures and enabling distributed queries.
 
+## Material
+- https://www.youtube.com/watch?v=iLXXoDaFoxs
+- https://www.youtube.com/watch?v=njjBdmAQnR0
+- https://www.youtube.com/watch?v=2ryG3Jy6eIY
+- https://clickhouse.com/docs
