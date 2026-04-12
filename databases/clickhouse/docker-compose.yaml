@@ -8,6 +8,8 @@ services:
     environment:
       ZOO_MY_ID: 1
       ZOO_SERVERS: server.1=zookeeper:2888:3888
+    volumes:
+      - ./zoo.cfg:/conf/zoo.cfg
   clickhouse-01:
     image: "clickhouse/clickhouse-server:latest"
     user: "101:101"
