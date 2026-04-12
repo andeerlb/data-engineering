@@ -99,3 +99,4 @@ ORDER BY id;
 - `ORDER BY id`: Sets the primary key for the table.
 
 This setup ensures that data inserted into the table is automatically replicated and kept consistent across the cluster, providing resilience against node failures and enabling distributed queries.
+
