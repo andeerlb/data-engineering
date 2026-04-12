@@ -105,3 +105,4 @@ This setup ensures that data inserted into the table is automatically replicated
 - https://www.youtube.com/watch?v=njjBdmAQnR0
 - https://www.youtube.com/watch?v=2ryG3Jy6eIY
 - https://clickhouse.com/docs
+- https://www.youtube.com/watch?v=2ryG3Jy6eIY
