@@ -3,8 +3,8 @@ services:
     image: apachepulsar/pulsar:4.2.0
     container_name: pulsar
     ports:
-      - "6650:6650"
-      - "8080:8080"
+      - "6650:6650" # Pulsar broker port
+      - "8080:8080" # Pulsar admin API port
     volumes:
       - ./data:/pulsar/data
     command: bin/pulsar standalone
@@ -13,8 +13,8 @@ services:
     image: apachepulsar/pulsar-manager:v0.4.0
     container_name: pulsar-manager
     ports:
-      - "9527:9527"
-      - "7750:7750"
+      - "9527:9527" # Pulsar Manager port
+      - "7750:7750" # Pulsar Manager API port
     environment:
       SPRING_CONFIGURATION_FILE: /pulsar-manager/pulsar-manager/application.properties
     depends_on:

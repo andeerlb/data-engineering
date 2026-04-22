@@ -36,3 +36,25 @@ Add a new environment
 - Environment name: what you want, maybe `test`, `standalone`, etc.
 - Service URL: `http://pulsar:8080`
 - Bookie URL: `pulsar://pulsar:6650`
+
+## What is a Bookie in Apache Pulsar?
+
+A **Bookie** comes from Apache BookKeeper and is responsible for **storing data on disk**.
+
+> A storage node that persists messages in Apache Pulsar
+
+---
+
+## How Pulsar Works
+
+Apache Pulsar is split into two main parts:
+
+### 1. Broker
+- Receives messages from producers
+- Sends messages to consumers
+- Handles communication
+
+### 2. Bookie (Storage)
+- Stores messages on disk
+- Ensures durability
+- Manages logs (called *ledgers*)
