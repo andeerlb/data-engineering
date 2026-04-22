@@ -11,3 +11,28 @@
 - Built-in support for geo-replication
 - Tiered storage
 - Native support for both streaming and queueing use cases
+
+## Configuration
+```sh
+docker compose up -d
+
+# validate if it's ok
+docker exec -it pulsar-manager curl http://pulsar:8080/admin/v2/clusters # -> ["standalone"]
+
+# to create user
+CSRF_TOKEN=$(curl http://localhost:7750/pulsar-manager/csrf-token)
+curl \
+   -H 'X-XSRF-TOKEN: $CSRF_TOKEN' \
+   -H 'Cookie: XSRF-TOKEN=$CSRF_TOKEN;' \
+   -H "Content-Type: application/json" \
+   -X PUT http://localhost:7750/pulsar-manager/users/superuser \
+   -d '{"name": "admin", "password": "apachepulsar", "description": "test", "email": "username@test.org"}'
+# visit  http://localhost:9527, the created account is admin/apachepulsar
+```
+
+## UI
+Add a new environment
+
+- Environment name: what you want, maybe `test`, `standalone`, etc.
+- Service URL: `http://pulsar:8080`
+- Bookie URL: `pulsar://pulsar:6650`
