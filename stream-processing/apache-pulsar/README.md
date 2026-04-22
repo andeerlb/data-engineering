@@ -44,8 +44,6 @@ A **Bookie** comes from Apache BookKeeper and is responsible for **storing data 
 
 > A storage node that persists messages in Apache Pulsar
 
----
-
 ## How Pulsar Works
 
 Apache Pulsar is split into two main parts:
