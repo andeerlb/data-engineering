@@ -11,6 +11,31 @@ Event data (clickstreams, IoT, telemetry)
 Data warehousing for fast reporting
 ClickHouse is used by companies like Yandex, Cloudflare, and many others to power analytics on massive datasets, because it’s extremely fast for reading and aggregating data at scale. It’s column-oriented, which means it’s optimized for reading lots of data, not for frequent updates or deletes.
 
+## Row-based vs Column-based
+![](./row-based-vs-column-based.png)
+
+### Row-based (OLTP)
+- Stores data **row by row**
+- Best for **transactions (INSERT/UPDATE/DELETE)**
+- Fast when reading **full records**
+- Slower for analytics
+
+### Column-based (OLAP)
+
+- Stores data **column by column**
+- Best for **analytics (SELECT, aggregations)**
+- Reads only needed columns → **faster queries**
+- Slower writes/updates
+
+## Engine
+![](./engine.png)
+
+**MergeTree**: The core and most flexible table engine in ClickHouse. It supports primary keys, partitioning, and fast data insertion. MergeTree tables store data in parts and periodically merge them for efficiency. Ideal for large analytical datasets.
+
+**ReplacingMergeTree**: Extends MergeTree by allowing automatic deduplication of rows based on a specified version column or the primary key. Useful for scenarios where you want to keep only the latest version of each row.
+
+**AggregatingMergeTree**: Designed for storing pre-aggregated data. It works with aggregate function states, making it efficient for scenarios where you want to store and merge partial aggregations (like sums, counts, averages) over time.
+
 ## Architecture Overview
 
 This setup provides a distributed ClickHouse cluster using Docker Compose, with ZooKeeper as the coordination service. The architecture is as follows:
