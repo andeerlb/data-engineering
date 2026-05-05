@@ -20,7 +20,7 @@ services:
     command: >
       bin/pulsar standalone
       -nss
-      --advertised-address localhost
+      --advertised-address pulsar
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/admin/v2/clusters"]
       interval: 10s
@@ -51,5 +51,16 @@ services:
     depends_on:
       pulsar:
         condition: service_healthy
+    networks:
+      - pulsar-net
+
+  pulsar-manager-init:
+    image: curlimages/curl:latest
+    volumes:
+      - ./init-pulsar-manager.sh:/init.sh
+    entrypoint: ["/bin/sh", "/init.sh"]
+    depends_on:
+      pulsar-manager:
+        condition: service_started
     networks:
       - pulsar-net
