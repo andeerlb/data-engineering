@@ -27,7 +27,7 @@ curl \
    -H 'Cookie: XSRF-TOKEN=$CSRF_TOKEN;' \
    -H "Content-Type: application/json" \
    -X PUT http://localhost:7750/pulsar-manager/users/superuser \
-   -d '{"name": "admin", "password": "apachepulsar", "description": "test", "email": "username@test.org"}'
+   -d '{"name": "pulsar", "password": "pulsar", "description": "test", "email": "username@test.org"}'
 # visit  http://localhost:9527, the created account is admin/apachepulsar
 ```
 

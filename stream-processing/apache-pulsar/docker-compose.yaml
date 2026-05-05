@@ -1,21 +1,43 @@
+version: "3.9"
+
+networks:
+  pulsar-net:
+    driver: bridge
+
 services:
   pulsar:
-    image: apachepulsar/pulsar:4.2.0
+    image: apachepulsar/pulsar:latest
     container_name: pulsar
-    ports:
-      - "6650:6650" # Pulsar broker port
-      - "8080:8080" # Pulsar admin API port
-    volumes:
-      - ./data:/pulsar/data
     command: bin/pulsar standalone
+    ports:
+      - "6650:6650"
+      - "8080:8080"
+    networks:
+      - pulsar-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/admin/v2/clusters"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
 
   pulsar-manager:
-    image: apachepulsar/pulsar-manager:v0.4.0
+    image: apachepulsar/pulsar-manager:latest
     container_name: pulsar-manager
     ports:
-      - "9527:9527" # Pulsar Manager port
-      - "7750:7750" # Pulsar Manager API port
+      - "9527:9527"
+      - "7750:7750"
     environment:
       SPRING_CONFIGURATION_FILE: /pulsar-manager/pulsar-manager/application.properties
+      ENV_REDIRECT_HOST: "localhost"
+      ENV_REDIRECT_PORT: "9527"
+      ENV_DRIVER_CLASS_NAME: "org.h2.Driver"
+      ENV_URL: "jdbc:h2:mem:pulsar-manager"
+      ENV_USERNAME: "sa"
+      ENV_PASSWORD: "sa"
+      ENV_LOG_LEVEL: "INFO"
     depends_on:
-      - pulsar
+      pulsar:
+        condition: service_healthy
+    networks:
+      - pulsar-net
