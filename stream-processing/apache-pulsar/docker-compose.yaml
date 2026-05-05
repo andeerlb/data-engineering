@@ -8,22 +8,30 @@ services:
   pulsar:
     image: apachepulsar/pulsar:latest
     container_name: pulsar
-    command: bin/pulsar standalone
+    hostname: pulsar
+    restart: always
     ports:
       - "6650:6650"
       - "8080:8080"
     networks:
       - pulsar-net
+    volumes:
+      - ./data:/pulsar/data
+    command: >
+      bin/pulsar standalone
+      -nss
+      --advertised-address localhost
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/admin/v2/clusters"]
       interval: 10s
       timeout: 5s
       retries: 10
-      start_period: 20s
+      start_period: 30s
 
   pulsar-manager:
     image: apachepulsar/pulsar-manager:latest
     container_name: pulsar-manager
+    restart: always
     ports:
       - "9527:9527"
       - "7750:7750"
@@ -32,10 +40,14 @@ services:
       ENV_REDIRECT_HOST: "localhost"
       ENV_REDIRECT_PORT: "9527"
       ENV_DRIVER_CLASS_NAME: "org.h2.Driver"
-      ENV_URL: "jdbc:h2:mem:pulsar-manager"
+      ENV_URL: "jdbc:h2:file:/pulsar-manager/data/pulsar-manager"
       ENV_USERNAME: "sa"
       ENV_PASSWORD: "sa"
       ENV_LOG_LEVEL: "INFO"
+      PULSAR_MANAGER_OPTS: >
+        -Dpulsar.manager.service.url=http://pulsar:8080
+    volumes:
+      - ./pulsar-manager-data:/pulsar-manager/data
     depends_on:
       pulsar:
         condition: service_healthy
