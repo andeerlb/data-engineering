@@ -22,6 +22,19 @@ services:
       retries: 10
       start_period: 30s
 
+  dekaf:
+    image: visortelle/dekaf:1.1.0
+    restart: always
+    environment:
+      DEKAF_PULSAR_WEB_URL: "http://pulsar:8080"
+      DEKAF_PULSAR_BROKER_URL: "pulsar://pulsar:6650"
+    volumes:
+      - dekaf-library:/dekaf/data/library
+    ports:
+      - "8090:8090"
+    networks:
+      - pulsar-net
+
   pulsar-manager:
     image: apachepulsar/pulsar-manager:latest
     container_name: pulsar-manager
@@ -39,7 +52,7 @@ services:
       ENV_PASSWORD: "sa"
       ENV_LOG_LEVEL: "INFO"
       PULSAR_MANAGER_OPTS: >
-        -Dpulsar.manager.service.url=http://host.docker.internal:8080
+        -Dpulsar.manager.service.url=http://pulsar:8080
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
@@ -64,3 +77,6 @@ services:
 networks:
   pulsar-net:
     driver: bridge
+
+volumes:
+  dekaf-library:

@@ -1,9 +1,9 @@
 package com.apache_pulsar.demo;
 
 import org.springframework.pulsar.annotation.PulsarListener;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class OrderConsumer {
 
     @PulsarListener(
