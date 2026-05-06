@@ -35,44 +35,44 @@ services:
     networks:
       - pulsar-net
 
-  pulsar-manager:
-    image: apachepulsar/pulsar-manager:latest
-    container_name: pulsar-manager
-    restart: always
-    ports:
-      - "9527:9527"
-      - "7750:7750"
-    environment:
-      SPRING_CONFIGURATION_FILE: /pulsar-manager/pulsar-manager/application.properties
-      ENV_REDIRECT_HOST: "localhost"
-      ENV_REDIRECT_PORT: "9527"
-      ENV_DRIVER_CLASS_NAME: "org.h2.Driver"
-      ENV_URL: "jdbc:h2:file:/pulsar-manager/data/pulsar-manager"
-      ENV_USERNAME: "sa"
-      ENV_PASSWORD: "sa"
-      ENV_LOG_LEVEL: "INFO"
-      PULSAR_MANAGER_OPTS: >
-        -Dpulsar.manager.service.url=http://pulsar:8080
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    volumes:
-      - ./pulsar-manager-data:/pulsar-manager/data
-    depends_on:
-      pulsar:
-        condition: service_healthy
-    networks:
-      - pulsar-net
+  # pulsar-manager:
+  #   image: apachepulsar/pulsar-manager:latest
+  #   container_name: pulsar-manager
+  #   restart: always
+  #   ports:
+  #     - "9527:9527"
+  #     - "7750:7750"
+  #   environment:
+  #     SPRING_CONFIGURATION_FILE: /pulsar-manager/pulsar-manager/application.properties
+  #     ENV_REDIRECT_HOST: "localhost"
+  #     ENV_REDIRECT_PORT: "9527"
+  #     ENV_DRIVER_CLASS_NAME: "org.h2.Driver"
+  #     ENV_URL: "jdbc:h2:file:/pulsar-manager/data/pulsar-manager"
+  #     ENV_USERNAME: "sa"
+  #     ENV_PASSWORD: "sa"
+  #     ENV_LOG_LEVEL: "INFO"
+  #     PULSAR_MANAGER_OPTS: >
+  #       -Dpulsar.manager.service.url=http://pulsar:8080
+  #   extra_hosts:
+  #     - "host.docker.internal:host-gateway"
+  #   volumes:
+  #     - ./pulsar-manager-data:/pulsar-manager/data
+  #   depends_on:
+  #     pulsar:
+  #       condition: service_healthy
+  #   networks:
+  #     - pulsar-net
 
-  pulsar-manager-init:
-    image: curlimages/curl:latest
-    volumes:
-      - ./init-pulsar-manager.sh:/init.sh
-    entrypoint: ["/bin/sh", "/init.sh"]
-    depends_on:
-      pulsar-manager:
-        condition: service_started
-    networks:
-      - pulsar-net
+  # pulsar-manager-init:
+  #   image: curlimages/curl:latest
+  #   volumes:
+  #     - ./init-pulsar-manager.sh:/init.sh
+  #   entrypoint: ["/bin/sh", "/init.sh"]
+  #   depends_on:
+  #     pulsar-manager:
+  #       condition: service_started
+  #   networks:
+  #     - pulsar-net
 
 networks:
   pulsar-net:
