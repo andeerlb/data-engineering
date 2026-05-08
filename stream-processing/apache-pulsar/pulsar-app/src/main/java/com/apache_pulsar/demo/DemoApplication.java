@@ -18,5 +18,6 @@ public class DemoApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) {
 		orderProducer.sendOrder("{\"orderId\": \"12345\", \"product\": \"Laptop\", \"quantity\": 1}");
+		orderProducer.sendOrderWithDelay("{\"orderId\": \"12346\", \"product\": \"Smartphone\", \"quantity\": 2}");
 	}
 }
