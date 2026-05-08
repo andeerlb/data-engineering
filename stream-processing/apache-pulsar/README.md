@@ -65,6 +65,52 @@ With the chunk enabled, when the size of a message exzceeds the allowed maximum 
 3. The consumer buffers the chunked messages and aggregates them into the receiver queue when it receives all the chunks of a message
 4. The client consumes the aggreated message from the receiver queue.
 
+## Subscriptions
+A pulsar sbuscription is a named configuration rule that determines how messages are dlivered to consumers.
+Itt is a lease on a ttopic established by a group of consumers. There are fhour subscription types
+
+- **exclusive**: only allows a single consumer to attach to the subscription. If multiple consumers subscribe to a topic using the same subscription, an error occurs. Note that if the topic is partitioned, all partitions will be consumed by the single consumer allowed to be connected to the subscription.
+
+- **shared**: allows multiple consumers tto atttach to the same sbuscripition. Message are delivered in a [round-robin distribution](https://www.ibm.com/docs/en/webmethods-bpm/wte/11.1.0?topic=assignment-about-round-robin-task-distribution) across consumers, and any given message is delivered to only one consumer. When a consumer disconnects, all the messages that were sent to it and not ack will be rescheduled for sending to the remaining consumers.
+
+- **failover**: multiple consumers can attach to the same subscription. A master consumer is picked for a non partitioned topic or each partition of a partitioned topic and receives messages. When the master consumer disconnects, all message are delivedered to the nex consumer in the line.
+
+- **key_shared**: allows multiple consumers to attach to the same subscription. But different with the shared type, message in here are delivered in distribution across consumers and messages with the same key or same ordering key are delivered to only one consumer. No matter how many times the message is re-delivered, it is delivered to the same consumer.
+
+![image](./pulsar-subscription-types.png)
+
+## Multil-topic subscriptions
+when a consumer subscribes to a pulsar topic, by default it subscribes to one specific topic. However, pulsar consumers can simultaneously subscribe to multiple topics. you can define a list of topics in two ways
+
+- on the basis o regex
+- by explicittly defining a list of topics
+
+## Partitioned ttopics
+Normal topics are served only by a single broker, which limits the maximum throughput of the topic. Partitioned topic is a special type of topic handled by multiple brokers, thus allowing for higer throughput.
+
+A partitioned topic is implemented as N internal topics, where N is the number of partitions, when publishing message to this kind of topic, each message is routed to one of several brokers. The distribution of partitions across brokers is handled automatically by pulsar.
+
+## Routing modes
+when publishing to partitioned topics, you must specify a routing mode. The rounting mode determines each messages should be published to which partition or which internal topic.
+
+- **ound robin partition**: will publish messages across all partitions in round-robin fashion to achieve maximum throughput.
+- **Single partition**: will randomly pick one single partition and publish all the messages into that partition.
+- **Custom Parition**: use custom message routter implementation that will be called to determine the partition for a partticular message. User can create a custom routing mode by using java client and implementing the message router interface.
+
+## Non persistent topics
+By default, pulsar persistently stores all unack messages on multiple book keeper brookies (storage nodes). Data for message on persistent topics can thus survive broker restarts and subscriber failover.
+
+However, supports non persistent topics. Non persistent topics are pulsar topics in which message data is never persistently stored to disk and kept only in memory. when using non persitent delivery, killing a pulsar broker or disconnecting a subsriber tto a topic means that all in transit messagess are lost on that topic, meaning that clients may see message loss.
+
+Non persistent topics have names of this form
+
+```sh
+non-persistent://tenant/namespace/topic
+```
+
+## System topic
+System topic is a predefined topic for internal use witthin pulsar. It can be eitther a persistent or non persistent topic.
+
 ## Configuration
 ```sh
 docker compose up -d
