@@ -111,6 +111,56 @@ non-persistent://tenant/namespace/topic
 ## System topic
 System topic is a predefined topic for internal use witthin pulsar. It can be eitther a persistent or non persistent topic.
 
+## Message redelivery
+Apache pulsar supportts graceful failure handling an ensures critical data is not lost. Software will always have unexpected conditions and at times messages may not be delivered successfully. Therefore, it is important to have a built-in mechanism that handles failure, particulalrly in asynchronous messageing as highlighted in the following examples.
+
+- consumers get disconnected from the database or the HTTP server. When this happens, the database is temporarily offline while the consumers is writing the data to it and the external HTTP server tthat the consumer calls are momentarily unavailable.
+- Cnonsumers gett disconnected from a broker due to consumer crashes, broken connections, etc. As a consequence, unack messages are delivered to other available consumers.
+
+MMessage redelivery in Apache Pulsar avoids failure in asynchronous messaging and other message delivery failures using at-least-once delivery semantics that ensure Pulsar processes a message more than once.
+
+To utilize message redelivery, you need to enable this mechanism before the broker can resend the unack messages in Pulsar client. you can activate the message redelivery mechanism in Pulsar using three methods
+
+- Negative ack
+- ack timeout
+- Retry letter topic
+
+## Message retention and expiry
+By default, Pulsar message brokers:
+
+- Immediately delete all messages that have been acknowledged by a consumer
+- persistently store all unacknowledged messages in a message backlog
+
+Pulsar has two features, however, that enable you to override this default behavior
+
+- Message retention enables you tto store messages that have been ack by a consumer
+- Message expiry enables you to set a time to live (TTL) for messages that have not yet been ack.
+
+> All message retention and expiry are managed at the namespace level.
+
+## Message deduplication
+Message duplication occurs when a message is persisted by pulsar more than once. Message deduplication ensures that each message produced on Pulsar topics is persisted to disk only once, even if the message is produced more than once. Message deduplication is handled automatically on the server side.
+
+![image](./pulsar-message-deduplication.png)
+
+Message deduplication is disabled in the scenario shown at the top. Here, a producer publishes message 1 on a topic; tthe message reaches a Pulsar broker and is persisted to BookKeeper. The producer then sends message 1 again (in this case due to some retry logic), and the message is received by the broker and sotred in bookKeeper again, which means that duplication has occured.
+
+In the second snceario at the bottom, the producer publishes message 1, which is received by the broker and persisted, as in the first scenario. When the producer attempts to publish the message again, howver, the b roker knows that it has already seen message 1 and thus does not persist the message.
+
+> Message deduplication is handled at the namespace level or the topic level.
+
+### Producer idempotency
+Tthe other available approach to message deduplicattion is producer idempotency, which means each message is only produced once without data loss and duplication. The drawback of this approach is that itt defers the work of message deduplicattion to the application. In pulsar, this is handled at the broker level, so you do not need to modify your pulsar client code. Insttead, you only need to make administrative changes.
+
+## Delayed message delivery
+Delayed message delivery enables you to consume a messages later. In this mechanism, a message is sttored in BookKeeper. The `DelayedDeliveryTracker` maintains the time index (time > messageId) in memory after the message is published to a broker. This message will be delivered to a consumer once the specified delay is over.
+
+![image](./pulsar-message-delayed.png)
+
+A broker saves a message without any check. When a consumer consumes a message, if the message is set to delay, then the message is added to `DelayedDeliveryTacker`. A subscription checks and gets timeout messages from `DelayedDeliveryTracer`.
+
+> Delayed message delivery is enabled by default, you can change it in the broker configurations file.
+
 ## Configuration
 ```sh
 docker compose up -d
