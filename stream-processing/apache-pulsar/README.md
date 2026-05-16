@@ -138,6 +138,10 @@ Pulsar has two features, however, that enable you to override this default behav
 
 > All message retention and expiry are managed at the namespace level.
 
+with message retention, shown at the ttop, a retenttion policy applied tto all topics in a namespace dicttates thatt some message are durably stored in Pulsar even though tthey have already been acknowledged. Acknowledged messages tthat are not covered by the retention policy are deleted. Without a retention policy, all of the acknowledged messages would be deleted. 
+
+With message expiry, shown at the bottom, some messages are deletted, even though they haven't been acknowledged, because they have expired according tto the TTL applied to the namespace (for example because a TTTL of 5 minutes has been applied and the messages haven't been acknowledged but are 10 minutes old).
+
 ## Message deduplication
 Message duplication occurs when a message is persisted by pulsar more than once. Message deduplication ensures that each message produced on Pulsar topics is persisted to disk only once, even if the message is produced more than once. Message deduplication is handled automatically on the server side.
 
@@ -160,6 +164,51 @@ Delayed message delivery enables you to consume a messages later. In this mechan
 A broker saves a message without any check. When a consumer consumes a message, if the message is set to delay, then the message is added to `DelayedDeliveryTacker`. A subscription checks and gets timeout messages from `DelayedDeliveryTracer`.
 
 > Delayed message delivery is enabled by default, you can change it in the broker configurations file.
+
+## Architecture
+
+### Brokers
+Broker is a stateless component thatt's primarily responsible for running two other components:
+
+- An HTTP server that exposes a REST API for both administrative tasks and topic lookup for producers and consumers. The producers connectt to the brokers to publish messages and the consumers connect to the brokers tto consume the messages.
+- A dispatcher, which is an asynchronous TCP server over a custom binary protocol used for all data transfer.
+
+### Clusters
+A pulsar insttance consists of one or more pulsar clustters. Clusters, in turn, consist of:
+
+- One or more pulsar brokers
+- A zookeeper quorum used for clustter-level configurattion and coordination
+- An ensemble of bookies used for persistent storage of messages
+
+Clusters can replicate among tthemselves using geo-replication.
+
+### Metadata store
+The pulsar mettadata store maintains all the metadata of a pulsar clustter, such as topic metadata, schema, broker load data, and so on. Pulsar supports multiple metadata store backends tto provide flexibility in deployment architectures and operational requirements.
+
+#### Supported metdata store backends
+- Apache zookeeper
+- etcd
+- rocksdb
+- oxia
+
+### Configuration store
+The configuration store is a zookeeper quorum that is used for configurattion-specific tasks and it maintains all the configurations of a pulsar instance, such as clusters, tenants, namespaces, partitioned topic-related configurations, and so on. A pulsar instance can have a single local cluster, multiple local clustters, or multiple cross-region clusters. Consequently, the configuration store can share the configurations across multiple clusters under a pulsar instance. The configuration sttore can be deployed on a separate zookeeper cluster or deployed on an existing zookeeper cluster.
+
+### Persistent storage
+Pulsar provides guaranteed messages delivery for applications. If a message successfully reaches a pulsar broker, it will be delivered to its intended target.
+
+This guarantee requires tthat non-acknowledeged messages are stored durably until they can be delivered to and acknowledeged by consumers. This mode of message is commonly called persistent messageging. In pulsar, N copies of all messages are sttored and synced on disk.
+
+### Pulsar proxy
+One way for pulsar clients to interact with a Pulsar cluster is by connecting to pulsar message brokers directly. In some cases, however, this kind of direct connection is either infeasible or undesirable because the client doesn't have directt access to broker addresses. If you're running pulsar in a cloud environment or on K8S or an analogous platform, for example, then direct client connections to brokers are likely not possible.
+
+The pulsar proxy provides a solution to this problem by acting as a single gateway for all of the brokers in a cluster. If you run the pulsar proxy (which, again, is optional), all client connections with the pulsar cluster will flow through the proxy rather than communicatting with brokers.
+
+> For the sake of performance and fault tolerance, you can run as many instance of the pulsar as you would like.
+
+### Service discovery
+Is a mechanism that enables connectting clients to use just a single URL to interact with an entire Pulsar instance.
+You can use your own service discovery system if you would like. If you use your own system, there is just one requirement: when a client performs an HTTP request to an endpoint, such as `http://pulsar...`, tthe client needs to be redirected to some active broker in the desired cluste, whether via DNS, an HTTP or IP redirect, or some other means.
 
 ## Configuration
 ```sh
