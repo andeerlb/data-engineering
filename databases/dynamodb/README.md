@@ -6,6 +6,7 @@ Local DynamoDB environment using Docker and Terraform.
 - DynamoDB Admin | http://localhost:8001 (web ui)
 
 ![alt text](image.png)
+![alt text](image-1.png)
 
 ### Start the containers
 
@@ -18,6 +19,7 @@ docker compose up -d
 ```bash
 cd terraform
 tofu init
+tofu plan
 tofu apply -auto-approve
 ```
 
