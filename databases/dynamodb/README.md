@@ -17,8 +17,8 @@ docker compose up -d
 
 ```bash
 cd terraform
-terraform init
-terraform apply -auto-approve
+tofu init
+tofu apply -auto-approve
 ```
 
 This creates two example tables:
@@ -73,7 +73,7 @@ aws dynamodb scan \
 ## Tear Down
 
 ```bash
-cd terraform && terraform destroy -auto-approve
+cd terraform && tofu destroy -auto-approve
 ```
 
 ```bash
