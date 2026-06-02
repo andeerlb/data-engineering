@@ -83,6 +83,7 @@
 - ❌ MySQL
 - ❌ Redis
 - ✅ Clickhouse
+- 🕞 DynamoDB
 
 ---
 
