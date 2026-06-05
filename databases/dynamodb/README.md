@@ -132,3 +132,9 @@ dyunamodb supportss zero etl integration with amazon redshift and using an opera
 
 ### caching
 Accelerator (dax) is a fully managed, highly available caching service built for dynamodb. Dax delivers up to 10 times performance improvement - from millis to micros - event at millions of requests per seconds.
+
+### security
+It utilizes iam to help you securely control access to your dynamodb resources. With iam, you can centrally manage permissions that control which dynamodb users can access resources. You use IAM to control who is authenticated (signed in) and authorized (has permissions) to use resources. Because dynamodb utilizes iam, there are no users names or passwords for accessing dynamodb. Because you don't have any complicated password rotatttion policies to manage, it simplifies your security posture. With iam, you can also enable fine-grained access control to provide authorization at the attribute level. you can also define resource-based policies with support for iam access analyzer and block public access bpa to simplify policy management.
+
+### Resilience
+By default, dynamo automatically replicates your dat across three availability zones to provide high durability and a 99,99% availability SLA. Dynamodb also provides additional capacitlities to help you achieve your business continuity and disaster recovery objectives.
