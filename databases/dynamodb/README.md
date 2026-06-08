@@ -234,6 +234,36 @@ A global table is composed of multiple replica tables in different aws regions. 
 
 
 ### indexes
+Global and local indexes, these are additional indexes created on a table, in addition to existing hash an range indexes of the table. Global index is similiar to a hash. Range index behave similarly to the range index used with the hash of the table. n you entity model in your code, the getter must be annotated in this way
+
+- For global indexes
+ ```java
+    @DynamoDBIndexHashKey(globalSecondaryIndexName = INDEX_GLOBAL_RANGE_US_TS)
+    @DynamoDBAttribute(attributeName = PROPERTY_USER)
+    public String getUser() {
+        return user;
+    }
+```
+
+- For range index associated to the global index
+```java
+    @DynamoDBIndexRangeKey(globalSecondaryIndexName = INDEX_GLOBAL_RANGE_US_TS)
+    @DynamoDBAttribute(attributeName = PROPERTY_TIMESTAMP)
+    public String getTimestamp() {
+        return timestamp;
+    }
+```
+
+**LSI** - allows you to perform a query on a single Hash-Key while using multiple different attributes to "filter" or restrict the query.
+
+**GSI** - allows you to perform queries on multiple Hash-Keys in a table, but costs extra in throughput, as a result.
 
 #### global secondary index
 An index with a has and range key that can be different from those on the table. A global secondary index is considered "global" because queries on the index can span all of the data in a ttable, across all partitions.
+
+#### local secondary index
+An index that has the same hash key as the table, but a different range key. A local secondary index is "local" in the sense that every partition of  a local secondary index is scoped to a table partition that has the same has key.
+
+> in order for a table write to succeed, the provisioned throughput settings for the table and
+> all of its global secondary indexes must have enough write capacity to accommodate the write;
+> otherwise, the write to the table will be throttled

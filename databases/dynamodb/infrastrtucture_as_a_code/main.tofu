@@ -34,9 +34,25 @@ resource "aws_dynamodb_table" "orders" {
     type = "S"
   }
 
+  # LSI
+  local_secondary_index {
+    name            = "status-index"
+    range_key       = "status"
+    projection_type = "ALL"
+  }
+
+  # GSI #1
   global_secondary_index {
-    name            = "user_id-index"
+    name            = "user_id-created_at-index"
     hash_key        = "user_id"
+    range_key       = "created_at"
+    projection_type = "ALL"
+  }
+
+  # GSI #2
+  global_secondary_index {
+    name            = "status-created_at-index"
+    hash_key        = "status"
     range_key       = "created_at"
     projection_type = "ALL"
   }
