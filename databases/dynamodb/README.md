@@ -153,3 +153,87 @@ To read an item from the table, you must specficy the partition key value for th
 If the table has a composite primary key (partition key and sort key), dynamo calculates the hash value of the partition key in the same way as described in partition key. However, it tends to keep items which have the same value of partition key close together and in sorted order by the sort key attribute's value. The set of items which have the same value of partition key is called an item collection. Item collections are optimized for effieicnet retrieval of ranges of the item within the collection. If your table doesn't have local secondary indexes, dynamodb will auttomatically split your item collection over as many partitions as required to store the data and to serve read and write throughput.
 
 To write an item to the table, dynamo calculates the hash value of the partition key to determine which partition should contain the item. In that partition, several items could have the same partition key value. So dynamodb stores the item among the others with the same partition key, in ascending order by sort key.
+
+
+### creating a table with dynamodb
+```json
+{
+    TableName : "Music",
+    KeySchema: [
+        {
+            AttributeName: "Artist",
+            KeyType: "HASH" //Partition key
+        },
+        {
+            AttributeName: "SongTitle",
+            KeyType: "RANGE" //Sort key
+        }
+    ],
+    AttributeDefinitions: [
+        {
+            AttributeName: "Artist",
+            AttributeType: "S"
+        },
+        {
+            AttributeName: "SongTitle",
+            AttributeType: "S"
+        }
+    ],
+    ProvisionedThroughput: {       // Only specified if using provisioned mode
+        ReadCapacityUnits: 1,
+        WriteCapacityUnits: 1
+    }
+}
+```
+
+### Table operations
+
+#### describind the table
+describe the stracuture of the table, with all of the column names, data types, and sizes.
+
+| Field | Type | Null | Key | Default | Extra |
+|--------|--------|--------|--------|--------|--------|
+| Artist | varchar(20) | NO | PRI | NULL | |
+| SongTitle | varchar(30) | NO | PRI | NULL | |
+| AlbumTitle | varchar(25) | YES | | NULL | |
+| Year | int(11) | YES | | NULL | |
+| Price | float | YES | | NULL | |
+| Genre | varchar(10) | YES | | NULL | |
+| Tags | text | YES | | NULL | |
+
+#### inserting
+```sql
+INSERT INTO Music
+    (Artist, SongTitle, AlbumTitle,
+    Year, Price, Genre,
+    Tags)
+VALUES(
+    'No One You Know', 'Call Me Today', 'Somewhat Famous',
+    2015, 2.14, 'Country',
+    '{"Composers": ["Smith", "Jones", "Davis"],"LengthInSeconds": 214}'
+);```
+
+### creating index
+
+```sql
+CREATE INDEX GenreAndPriceIndex
+ON Music (genre, price);
+```
+
+### read consistency
+
+#### eventually consistent reads
+It's the default read consistent model for all read op. When issuing it to a dynamodb table or an index, the responses may not reflect the results of a recently completed write operattion. If you repeat your read request after a short time, the response should eventually return the more recent item. Eventually consistent reads are supported on tables, local secondary indexes, and global secondary indexes. Also note tthat all reads from a dynamodb stream are also eventually consistent.
+
+#### strongly consistent reads
+Read operations such as getitem, query, and scan provide an optional consistentread parameter. If you set consisdent read to true, it returns a response with the most up-to-date data.
+
+
+#### global tables read consistency
+A global table is composed of multiple replica tables in different aws regions. Any change made to any item in any replica table is replicated to all the other replicas within the same global table, typically within a second, and are eventually consistent.
+
+
+### indexes
+
+#### global secondary index
+An index with a has and range key that can be different from those on the table. A global secondary index is considered "global" because queries on the index can span all of the data in a ttable, across all partitions.
