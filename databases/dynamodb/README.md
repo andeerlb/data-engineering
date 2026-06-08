@@ -138,3 +138,18 @@ It utilizes iam to help you securely control access to your dynamodb resources. 
 
 ### Resilience
 By default, dynamo automatically replicates your dat across three availability zones to provide high durability and a 99,99% availability SLA. Dynamodb also provides additional capacitlities to help you achieve your business continuity and disaster recovery objectives.
+
+### Table partitions and data disttribution in dynamodb
+It stores data in partitions. A parttition is an allocation of stage for a table, backed by solid state drives (ssds) and automatically replicated across multiple availability zones within an aws region. Partition management is handled entirely by dynamodb-you never have to manage partitions yourself.
+
+### Partittion key
+If your table has a simple primary key (partition key only), dynamo stores and retrieves each item based on its partition key value.
+
+To write an item to the table, dynamo uses the value of the partition kjey as input to an internal hash function. The output value from the hash function determines the partition in which the item will be stored.
+
+To read an item from the table, you must specficy the partition key value for the item. Dynamodb uses this value as input to itts hash function, yielding the partition in which the item can be found.
+
+### Parition key and sort key
+If the table has a composite primary key (partition key and sort key), dynamo calculates the hash value of the partition key in the same way as described in partition key. However, it tends to keep items which have the same value of partition key close together and in sorted order by the sort key attribute's value. The set of items which have the same value of partition key is called an item collection. Item collections are optimized for effieicnet retrieval of ranges of the item within the collection. If your table doesn't have local secondary indexes, dynamodb will auttomatically split your item collection over as many partitions as required to store the data and to serve read and write throughput.
+
+To write an item to the table, dynamo calculates the hash value of the partition key to determine which partition should contain the item. In that partition, several items could have the same partition key value. So dynamodb stores the item among the others with the same partition key, in ascending order by sort key.
