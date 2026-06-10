@@ -520,3 +520,96 @@ aws dynamodb query \
   --limit 1 \
   --endpoint-url http://localhost:8000
 ```
+
+### screenshots how the table looks like
+![alt text](image-2.png)
+![alt text](image-3.png)
+```json
+{
+  "AttributeDefinitions": [
+    {
+      "AttributeName": "UserId",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "GameTitle",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "TopScore",
+      "AttributeType": "N"
+    }
+  ],
+  "CreationDateTime": "2026-06-10T23:19:48.664Z",
+  "DeletionProtectionEnabled": false,
+  "GlobalSecondaryIndexes": [
+    {
+      "IndexArn": "arn:aws:dynamodb:ddblocal:000000000000:table/GameScores/index/GameTitleGSI",
+      "IndexName": "GameTitleGSI",
+      "IndexSizeBytes": 130,
+      "IndexStatus": "ACTIVE",
+      "ItemCount": 3,
+      "KeySchema": [
+        {
+          "AttributeName": "GameTitle",
+          "KeyType": "HASH"
+        },
+        {
+          "AttributeName": "TopScore",
+          "KeyType": "RANGE"
+        }
+      ],
+      "Projection": {
+        "ProjectionType": "ALL"
+      },
+      "ProvisionedThroughput": {
+        "ReadCapacityUnits": 1,
+        "WriteCapacityUnits": 1
+      }
+    }
+  ],
+  "ItemCount": 3,
+  "KeySchema": [
+    {
+      "AttributeName": "UserId",
+      "KeyType": "HASH"
+    },
+    {
+      "AttributeName": "GameTitle",
+      "KeyType": "RANGE"
+    }
+  ],
+  "LocalSecondaryIndexes": [
+    {
+      "IndexName": "TopScoreLSI",
+      "KeySchema": [
+        {
+          "AttributeName": "UserId",
+          "KeyType": "HASH"
+        },
+        {
+          "AttributeName": "TopScore",
+          "KeyType": "RANGE"
+        }
+      ],
+      "Projection": {
+        "ProjectionType": "ALL"
+      },
+      "IndexSizeBytes": 130,
+      "ItemCount": 3,
+      "IndexArn": "arn:aws:dynamodb:ddblocal:000000000000:table/GameScores/index/TopScoreLSI"
+    }
+  ],
+  "ProvisionedThroughput": {
+    "LastDecreaseDateTime": "1970-01-01T00:00:00.000Z",
+    "LastIncreaseDateTime": "1970-01-01T00:00:00.000Z",
+    "NumberOfDecreasesToday": 0,
+    "ReadCapacityUnits": 1,
+    "WriteCapacityUnits": 1
+  },
+  "TableArn": "arn:aws:dynamodb:ddblocal:000000000000:table/GameScores",
+  "TableName": "GameScores",
+  "TableSizeBytes": 130,
+  "TableStatus": "ACTIVE"
+}
+```
