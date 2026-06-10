@@ -271,6 +271,7 @@ An index that has the same hash key as the table, but a different range key. A l
 
 ### Scenario to use  global secondary index
 To illustrate, consider a table named GameScores that tracks users and scores for a mobile gaming application. Each iteam in GameScores is identified by a partition key (UserID) and a sort key (GameTitle). The following diagram shows how the items in the table would be organized. (Not all of the attributes are shown).
+
 ![](./GSI_01.png)
 
 Suppose that you wanted to writte a leaderboard applicattion to display top scores for each game. A query that specified the key attributes would be very efficient. However, if the application needed to retrieve data from gamescores based on gametitle only, it would need to use a scan operation. AS more items are added to the table, scans of all the data would become slow and inefficient. This makes it difficult to answer questions ssuch as the followring:
@@ -278,3 +279,191 @@ Suppose that you wanted to writte a leaderboard applicattion to display top scor
 - what is the top score ever  recorded for the game?
 - which user had the highest score for galaxy invaders?
 - what was the highest ratio of wins vs losses?
+
+This is exactly the kind of problem that global secondary indexes (gsi) were designed to salve in dynamodb.
+
+> Show me all games played by Galaxy.
+
+- Partition Key: UserId
+- Sort Key: GameTitle
+
+Solution 1: Top scores per game
+Create a GSI:
+
+```bash
+GSI: GameTitle-TopScore-index
+
+Partition Key: GameTitle
+Sort Key: TopScore
+```
+Because dynamo sorts sortt keys in ascending order, you can query in rever order. This efficiently answers:
+
+> Which user had the highest score for galaxy invaders?
+
+Solution 2: Hihgest score ever recorded
+Create another gsi
+
+```bash
+GSI: TopScore-index
+
+Partition Key: Leaderboard
+Sort Key: TopScore
+```
+
+```json
+{
+    "UserId": "Bob",
+    "GameTitle": "Galaxy Invaders",
+    "TopScore": 1200,
+    "Leaderboard": "GLOBAL"
+}
+```
+
+```java
+Leaderboard = "GLOBAL"
+ScanIndexForward = false
+Limit = 1
+```
+
+Store a constant value, this answers:
+
+> what is the top score ever recoreded for any game?
+
+A query gsi only reads the items that match the partition key.
+
+the dynamod db mindset is when designing dynamod tables, you don't start with
+
+> what tables do I need?
+
+you start with
+
+> what questions does my application need to answers?
+
+Then you design the primary key and gsis to support those access patterns efficiently.
+
+In short, LSI change the sort key, the partition key stays exactly the same as the table.
+
+Suppose the table becomes
+
+| UserId | GameTitle       | TopScore |
+| ------ | --------------- | -------- |
+| Alice  | Galaxy Invaders | 900      |
+| Alice  | Meteor Blast    | 700      |
+| Alice  | Space Race      | 1300     |
+
+primary key is
+
+```bash
+PK = UserId
+SK = GameTitle
+```
+
+LSI (local secondary index)
+```bash
+PK = UserId
+SK = TopScore
+```
+
+Dynamnodb creates another ordering within each user's partition.
+
+Primary key table
+
+```bash
+Alice
+ ├─ Galaxy Invaders
+ ├─ Meteor Blast
+ └─ Space Race
+```
+
+LSI table
+```bash
+Alice
+ ├─ Galaxy Invaders
+ ├─ Meteor Blast
+ └─ Space Race
+```
+
+now you can efficiently ask, what is Alice's highest score?
+
+```java
+Query:
+UserId = "Alice"
+
+IndexName = "TopScoreLSI"
+
+ScanIndexForward = false
+Limit = 1
+```
+
+LSI
+    - same partition key as the table
+    - different sort key
+    - can't be added after table creation
+    - strongly consistent reads supported
+    - maximum 5 lsis per table
+
+
+Now about gsi (global secondary index). A gsi can use completely different keys. Let's suppose we have defined
+
+```bash
+PK = GameTitle
+SK = TopScore
+```
+
+Dynamodb builds a completely separate index. Table structure
+
+```bash
+Galaxy Invaders
+ ├─ 900  → Alice
+ └─ 1200 → Bob
+
+Meteor Blast
+ └─ 700 → Alice
+```
+
+Now you can ask, who has the highest score in galaxy invaders?
+
+```java
+Query:
+GameTitle = "Galaxy Invaders"
+
+IndexName = "GameTitleTopScore"
+
+ScanIndexForward = false
+Limit = 1
+```
+
+- different partition key allowed
+- different sort key allowed
+- can be added after table creation
+- only eventually consistent reads
+- maximum 20 gsis per table
+
+How DynamoDB keeps them updated?
+Suppose you insert
+
+```json
+{
+    "UserId": "Carol",
+    "GameTitle": "Galaxy Invaders",
+    "TopScore": 1500
+}
+```
+DynamoDB writes, base table:
+
+```bash
+Carol
+ └─ Galaxy Invaders → 1500
+```
+lsi if defined
+```bash
+Carol
+ └─ 1500 → Galaxy Invaders
+```
+gsi if defined
+```bash
+Galaxy Invaders
+ └─ 1500 → Carol
+```
+
+in short, the indexes are maintained automatically by dynamodb.
