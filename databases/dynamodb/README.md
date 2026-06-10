@@ -267,3 +267,14 @@ An index that has the same hash key as the table, but a different range key. A l
 > in order for a table write to succeed, the provisioned throughput settings for the table and
 > all of its global secondary indexes must have enough write capacity to accommodate the write;
 > otherwise, the write to the table will be throttled
+
+
+### Scenario to use  global secondary index
+To illustrate, consider a table named GameScores that tracks users and scores for a mobile gaming application. Each iteam in GameScores is identified by a partition key (UserID) and a sort key (GameTitle). The following diagram shows how the items in the table would be organized. (Not all of the attributes are shown).
+![](./GSI_01.png)
+
+Suppose that you wanted to writte a leaderboard applicattion to display top scores for each game. A query that specified the key attributes would be very efficient. However, if the application needed to retrieve data from gamescores based on gametitle only, it would need to use a scan operation. AS more items are added to the table, scans of all the data would become slow and inefficient. This makes it difficult to answer questions ssuch as the followring:
+
+- what is the top score ever  recorded for the game?
+- which user had the highest score for galaxy invaders?
+- what was the highest ratio of wins vs losses?
