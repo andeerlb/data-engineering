@@ -467,3 +467,56 @@ Galaxy Invaders
 ```
 
 in short, the indexes are maintained automatically by dynamodb.
+
+
+
+
+# Testing index creation to understand better how it works
+Below I will add those command that i've used if you want to reproduce my tests
+
+Creating dynamodb table
+```bash
+aws dynamodb create-table \
+  --cli-input-json file://gamescores-table.json \
+  --endpoint-url http://localhost:8000
+```
+
+Inserting some data
+```bash
+aws dynamodb batch-write-item \
+  --request-items file://data.json \
+  --endpoint-url http://localhost:8000
+```
+
+get all of Alice's scores
+```bash
+aws dynamodb query \
+  --table-name GameScores \
+  --key-condition-expression "UserId = :u" \
+  --expression-attribute-values '{":u":{"S":"Alice"}}' \
+  --endpoint-url http://localhost:8000
+```
+
+get Alice's highest score using LSI
+```bash
+aws dynamodb query \
+  --table-name GameScores \
+  --index-name TopScoreLSI \
+  --key-condition-expression "UserId = :u" \
+  --expression-attribute-values '{":u":{"S":"Alice"}}' \
+  --scan-index-forward false \
+  --limit 1 \
+  --endpoint-url http://localhost:8000
+```
+
+get the highest score for galaxy invaders using gsi
+```bash
+aws dynamodb query \
+  --table-name GameScores \
+  --index-name GameTitleTopScoreGSI \
+  --key-condition-expression "GameTitle = :g" \
+  --expression-attribute-values '{":g":{"S":"Galaxy Invaders"}}' \
+  --scan-index-forward false \
+  --limit 1 \
+  --endpoint-url http://localhost:8000
+```

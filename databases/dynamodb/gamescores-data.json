@@ -1,0 +1,31 @@
+{
+  "GameScores": [
+    {
+      "PutRequest": {
+        "Item": {
+          "UserId": { "S": "Alice" },
+          "GameTitle": { "S": "Galaxy Invaders" },
+          "TopScore": { "N": "900" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "UserId": { "S": "Alice" },
+          "GameTitle": { "S": "Meteor Blast" },
+          "TopScore": { "N": "700" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "UserId": { "S": "Bob" },
+          "GameTitle": { "S": "Galaxy Invaders" },
+          "TopScore": { "N": "1200" }
+        }
+      }
+    }
+  ]
+}

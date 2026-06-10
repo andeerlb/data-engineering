@@ -1,0 +1,71 @@
+{
+    "TableName": "GameScores",
+    "AttributeDefinitions": [
+        {
+            "AttributeName": "UserId",
+            "AttributeType": "S"
+        },
+        {
+            "AttributeName": "GameTitle",
+            "AttributeType": "S"
+        },
+        {
+            "AttributeName": "TopScore",
+            "AttributeType": "N"
+        }
+    ],
+    "KeySchema": [
+        {
+            "AttributeName": "UserId",
+            "KeyType": "HASH"
+        },
+        {
+            "AttributeName": "GameTitle",
+            "KeyType": "RANGE"
+        }
+    ],
+    "LocalSecondaryIndexes": [
+        {
+            "IndexName": "TopScoreLSI",
+            "KeySchema": [
+                {
+                    "AttributeName": "UserId",
+                    "KeyType": "HASH"
+                },
+                {
+                    "AttributeName": "TopScore",
+                    "KeyType": "RANGE"
+                }
+            ],
+            "Projection": {
+                "ProjectionType": "ALL"
+            }
+        }
+    ],
+    "GlobalSecondaryIndexes": [
+        {
+            "IndexName": "GameTitleGSI",
+            "KeySchema": [
+                {
+                    "AttributeName": "GameTitle",
+                    "KeyType": "HASH"
+                },
+                {
+                    "AttributeName": "TopScore",
+                    "KeyType": "RANGE"
+                }
+            ],
+            "Projection": {
+                "ProjectionType": "ALL"
+            },
+            "ProvisionedThroughput": {
+                "ReadCapacityUnits": 1,
+                "WriteCapacityUnits": 1
+            }
+        }
+    ],
+    "ProvisionedThroughput": {
+        "ReadCapacityUnits": 1,
+        "WriteCapacityUnits": 1
+    }
+}
