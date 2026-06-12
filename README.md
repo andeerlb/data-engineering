@@ -79,11 +79,11 @@
 ## Databases & Storage
 
 ### Databases
-- ❌ PostgreSQL
+- 🕞 PostgreSQL
 - ❌ MySQL
 - ❌ Redis
 - ✅ Clickhouse
-- 🕞 DynamoDB
+- ✅ DynamoDB
 
 ---
 
@@ -114,7 +114,7 @@
 - ✅ Kafka Streams
 - ✅ KSQLDB
 - ✅ Apache Flink
-- 🕞 Apache Pulsar
+- ✅ Apache Pulsar
 
 ---
 
