@@ -469,7 +469,69 @@ Galaxy Invaders
 in short, the indexes are maintained automatically by dynamodb.
 
 
+## DynamoDB Streams
 
+DynamoDB Streams captures a time-ordered sequence of every item-level change in a table — inserts, updates, and deletes — and makes those records available for up to 24 hours.
+
+### How it works
+
+Each change to a table item produces a **stream record** containing:
+- `eventName` — the type of change: `INSERT`, `MODIFY`, or `REMOVE`
+- `dynamodb.Keys` — the primary key of the affected item
+- `dynamodb.OldImage` — the item state **before** the change (if configured)
+- `dynamodb.NewImage` — the item state **after** the change (if configured)
+
+The stream is divided into **shards**, each covering a partition of the table. Consumers read records from each shard using shard iterators.
+
+### stream_view_type options
+
+What data is written to each stream record depends on the `stream_view_type` setting:
+
+| Value | What you get |
+|---|---|
+| `KEYS_ONLY` | Only the primary key of the changed item |
+| `NEW_IMAGE` | The full item after the change |
+| `OLD_IMAGE` | The full item before the change |
+| `NEW_AND_OLD_IMAGES` | Full item state before and after (best for CDC/auditing) |
+
+### Common use cases
+
+- **Event-driven architectures** — trigger a Lambda or service when data changes
+- **CDC (Change Data Capture)** — replicate changes to another database or data warehouse
+- **Audit logs** — record every state transition of an item over time
+- **Cache invalidation** — invalidate a cache entry when the source item changes
+
+### Running the POC locally
+
+The `streams/` folder contains a producer and consumer script to demonstrate Streams against the local DynamoDB container.
+
+```bash
+# Terminal 1 — start the consumer (listens for changes)
+cd streams
+pip install -r requirements.txt
+python consumer.py
+
+# Terminal 2 — run the producer (INSERT → UPDATE → DELETE)
+python producer.py
+```
+
+Expected output in the consumer terminal:
+
+```
+[INSERT]  keys={'order_id': 'order-001', 'created_at': '...'}
+  AFTER  → {'order_id': 'order-001', 'status': 'PENDING', ...}
+
+[MODIFY]  keys={'order_id': 'order-001', 'created_at': '...'}
+  BEFORE → {'status': 'PENDING', ...}
+  AFTER  → {'status': 'SHIPPED', ...}
+
+[REMOVE]  keys={'order_id': 'order-001', 'created_at': '...'}
+  BEFORE → {'status': 'SHIPPED', ...}
+```
+
+![alt text](image-4.png)
+
+> **Note:** DynamoDB Local supports Streams on the same endpoint (port 8000). In real AWS, the stream endpoint is auto-generated and different from the table endpoint.
 
 # Testing index creation to understand better how it works
 Below I will add those command that i've used if you want to reproduce my tests
