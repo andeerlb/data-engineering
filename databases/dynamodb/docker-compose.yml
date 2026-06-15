@@ -25,4 +25,6 @@ services:
         condition: service_healthy
 
 volumes:
+  # Named volume managed by Docker. Persists DynamoDB data across container restarts.
+  # Remove it with `docker volume rm dynamodb_dynamodb-data` to start fresh.
   dynamodb-data:

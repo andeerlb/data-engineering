@@ -34,6 +34,11 @@ resource "aws_dynamodb_table" "orders" {
     type = "S"
   }
 
+  attribute {
+    name = "status"
+    type = "S"
+  }
+
   # LSI
   local_secondary_index {
     name            = "status-index"
@@ -56,6 +61,14 @@ resource "aws_dynamodb_table" "orders" {
     range_key       = "created_at"
     projection_type = "ALL"
   }
+
+  stream_enabled   = true
+  # Defines what data is written to the stream on each change (INSERT/MODIFY/REMOVE):
+  #   KEYS_ONLY        — only the primary key of the changed item
+  #   NEW_IMAGE        — the entire item after the change
+  #   OLD_IMAGE        — the entire item before the change
+  #   NEW_AND_OLD_IMAGES — full item state before and after (useful for CDC/auditing)
+  stream_view_type = "NEW_AND_OLD_IMAGES"
 
   tags = {
     Environment = "local"
