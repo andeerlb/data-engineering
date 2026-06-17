@@ -65,9 +65,7 @@ SELECT '{bad json}'::JSONB;
 -- ERROR: invalid input syntax for type json
 
 
--- ============================================================
 -- 6. NULL handling in JSONB
--- ============================================================
 -- SQL NULL (column is absent) vs JSON null (explicit null value)
 
 -- The brand column is SQL NULL for books:
@@ -93,9 +91,7 @@ FROM products
 WHERE attrs->>'brand' IS NULL;  -- returns rows where brand is JSON null OR key is missing
 
 
--- ============================================================
 -- 7. Comparing JSONB values
--- ============================================================
 -- JSONB supports =, <>, <, >, <=, >= operators
 
 SELECT '{"a": 1}'::JSONB = '{"a": 1}'::JSONB;   -- true
@@ -105,9 +101,7 @@ SELECT '{"a": 1}'::JSONB = '{"a": 2}'::JSONB;   -- false
 SELECT '{"b": 2, "a": 1}'::JSONB = '{"a": 1, "b": 2}'::JSONB;  -- true
 
 
--- ============================================================
 -- 8. Concatenation and merging with ||
--- ============================================================
 -- The || operator merges two JSONB objects (right side wins on conflict)
 
 SELECT
