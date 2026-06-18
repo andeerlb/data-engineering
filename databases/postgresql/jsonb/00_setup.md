@@ -1,10 +1,23 @@
+# Setup — Products Table with JSONB
+
+Create a `products` table with a `JSONB` column and populate it with sample data across multiple categories.
+
+## Create Table
+
+```sql
 CREATE TABLE products (
     id        INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name      TEXT    NOT NULL,
     category  TEXT    NOT NULL,
     attrs     JSONB   NOT NULL
 );
--- Electronics
+```
+
+## Insert Sample Data
+
+### Electronics
+
+```sql
 INSERT INTO products (name, category, attrs) VALUES
 (
     'Mechanical Keyboard TKL',
@@ -92,7 +105,6 @@ INSERT INTO products (name, category, attrs) VALUES
         "ratings": {"average": 4.9, "count": 14200}
     }'
 ),
--- Clothing
 (
     'Merino Wool T-Shirt',
     'clothing',
@@ -164,8 +176,6 @@ INSERT INTO products (name, category, attrs) VALUES
         "ratings": {"average": 4.8, "count": 3321}
     }'
 ),
-
--- Food and Kitchen
 (
     'Single Origin Ethiopian Coffee Beans',
     'food',
@@ -222,7 +232,6 @@ INSERT INTO products (name, category, attrs) VALUES
         "ratings": {"average": 4.7, "count": 18500}
     }'
 ),
--- Books
 (
     'Designing Data-Intensive Applications',
     'books',
@@ -233,7 +242,7 @@ INSERT INTO products (name, category, attrs) VALUES
         "tags": ["books", "databases", "distributed-systems", "engineering"],
         "specs": {
             "author": "Martin Kleppmann",
-            "publisher": "O'\''Reilly",
+            "publisher": "O Reilly",
             "year": 2017,
             "pages": 616,
             "isbn": "978-1449373320",
@@ -280,7 +289,6 @@ INSERT INTO products (name, category, attrs) VALUES
         "ratings": {"average": 4.4, "count": 9800}
     }'
 ),
--- Health and Fitness
 (
     'Adjustable Dumbbells 5-52.5 lbs',
     'fitness',
@@ -354,8 +362,11 @@ INSERT INTO products (name, category, attrs) VALUES
         "ratings": {"average": 4.6, "count": 51000}
     }'
 );
+```
 
--- Verify the data
+## Verify
+
+```sql
 SELECT
     category,
     COUNT(*) AS product_count,
@@ -363,3 +374,5 @@ SELECT
 FROM products
 GROUP BY category
 ORDER BY category;
+```
+![alt text](image.png)
